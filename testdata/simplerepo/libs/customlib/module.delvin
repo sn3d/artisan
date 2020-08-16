@@ -1,0 +1,10 @@
+task "jdk8" "build" {
+    cmd = "gradle clean build"
+}
+
+task "jdk8" "test" {
+    cmd = "gradle test"
+    deps = [
+        ":build"
+    ]
+}

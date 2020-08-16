@@ -1,0 +1,7 @@
+class "jdk8" {
+    src = "//classes/jdk8"
+}
+
+class "nodejs" {
+    image = "node:12.13.0"
+}
