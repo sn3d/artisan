@@ -68,24 +68,24 @@ func (ws *Workspace) Module(ref Ref) (*Module, error) {
 }
 
 // Task gives you task by given reference. If there is no
-// task, the error is returned.
-func (ws *Workspace) Task(ref Ref) (*Task, error) {
+// task, the null is returned.
+func (ws *Workspace) Task(ref Ref) *Task {
 	tskName := ref.GetTask()
 	if tskName == "" {
-		return nil, errors.New("No task in ref. defined")
+		return nil
 	}
 
 	module, err := ws.Module(ref)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
 	task := module.Task(tskName)
 	if task == nil {
-		return nil, errors.New("Task doesn't exist in module")
+		return nil
 	}
 
-	return task, nil
+	return task
 }
 
 // this function traverse upside over directories until we found directory with 'moncici.workspace'

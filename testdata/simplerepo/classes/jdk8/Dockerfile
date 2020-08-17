@@ -1,1 +1,1 @@
-FROM alpine
+FROM gradle:6.6.0-jdk8

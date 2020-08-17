@@ -1,26 +1,40 @@
 package delvin
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
 
+func ExampleNewRef() {
+	ref1 := NewRef("ws1", "//path/to/module", "build"); fmt.Println(ref1)
+	ref2 := NewRef("", "//path/to/module", "build"); fmt.Println(ref2)
+	ref3 := NewRef("", "//path/to/module", ""); fmt.Println(ref3)
+	ref4 := NewRef("", "", "build"); fmt.Println(ref4)
+
+	// Output:
+	// ws1://path/to/module:build
+	// //path/to/module:build
+	// //path/to/module
+	// :build
+}
+
 func TestRef_GetType(t *testing.T) {
 	// given ref. with 'git' type
-	ref := Ref("remote://app/custom:build")
+	ref := Ref("ws1://app/custom:build")
 
-	// when we get type
-	typ := ref.GetType()
+	// when we get workspace
+	typ := ref.GetWorkspace()
 
-	// then type must be 'git'
-	if typ != "remote" {
+	// then workspace must be 'ws1'
+	if typ != "ws1" {
 		t.FailNow()
 	}
 }
 
 func TestRef_GetPath(t *testing.T) {
 	// given complicated ref.
-	ref := Ref("remote://app/custom:build")
+	ref := Ref("ws1://app/custom:build")
 
 	// when we get type
 	path := ref.GetPath()

@@ -78,4 +78,3 @@ func appendFile(root string, filename string, tw *tar.Writer) {
 	})
 	tw.Write(data)
 }
-

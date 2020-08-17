@@ -1,37 +1,28 @@
 //+build integration
 
-package docker
+package docker_test
 
 import (
 	"github.com/unravela/delvin/delvin"
+	"github.com/unravela/delvin/delvin/docker"
 	"testing"
 )
 
-// This test require docker service with no image
+// Requirements:
+//  - This test require docker service with no image 'dlvin-jdk8' present
 func TestClassBuilder_Build(t *testing.T) {
 	// given a class with source defined
-	ws, err := delvin.Open("../../testdata/simplerepo")
-	if err != nil {
-		t.Errorf("Cannot open workspace %w", err)
-	}
-
+	ws, _ := delvin.Open("../../testdata/simplerepo")
 	class := ws.Class("jdk8")
 	if class == nil {
 		t.Errorf("Cannot get the class")
 	}
 
 	// when we want to build class image
-	cb, err := NewEnvClassBuilder()
-	if err != nil {
-		t.Errorf("Error creating class builder: %w", err)
-	}
+	cb, _ := docker.NewEnvClassBuilder()
+	image, _ := cb.Build(class, ws)
 
-	image, err := cb.Build(class, ws)
-	if err != nil {
-		t.Errorf("")
-	}
-
-	// then we should obtain the image's ID
+	// then we should obtain some image ID
 	if image.ID == "" {
 		t.Errorf("Class image is empty string")
 	}

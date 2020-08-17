@@ -1,13 +1,13 @@
 package delvin_test
 
 import (
-	"github.com/unravela/moncici/moncici"
+	"github.com/unravela/delvin/delvin"
 	"testing"
 )
 
 func TestOpen(t *testing.T) {
 	// when we try to open workspace from subdirectory
-	ws, err := moncici.Open("../testdata/simplerepo/webapp")
+	ws, err := delvin.Open("../testdata/simplerepo/webapp")
 
 	// then no error is occurred
 	if err != nil {
@@ -28,7 +28,7 @@ func TestOpen(t *testing.T) {
 
 func TestOpenInvalidFolder(t *testing.T) {
 	// when we try to open random folder out of the workspace
-	ws, err := moncici.Open("../testdata")
+	ws, err := delvin.Open("../testdata")
 
 	// then error is occurred
 	if err == nil {
@@ -43,14 +43,14 @@ func TestOpenInvalidFolder(t *testing.T) {
 
 func TestWorkspace_Task(t *testing.T) {
 	// given workspace of simple repository
-	ws, err := moncici.Open("../testdata/simplerepo")
+	ws, err := delvin.Open("../testdata/simplerepo")
 	if err != nil {
 		t.Errorf("Cannot open repository")
 	}
 
 	// when we get the existing task
-	tsk, err := ws.Task("//apps/webapp:test")
-	if err != nil {
+	tsk := ws.Task("//apps/webapp:test")
+	if tsk == nil {
 		t.Errorf("Cannot find task!")
 	}
 

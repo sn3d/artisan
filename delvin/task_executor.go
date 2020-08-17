@@ -1,5 +1,5 @@
 package delvin
 
 type TaskExecutor interface {
-	Exec(t *Task)
+	Exec(t *Task, img *ClassImage, buildDir string) error
 }

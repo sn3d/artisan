@@ -7,12 +7,30 @@ import (
 )
 
 // Ref is reference to module or task. The format is borrowed from
-// Bazel and looks like 'type://path/to/subdir:task', where type and task is optional.
+// Bazel and looks like 'workspace://path/to/module:task', where workspace and task is optional and
+// path is mandatory
 // Normally type is not set and the ref looks like something you know from bazel '//app:task'.
 type Ref string
 
-// GetType parse the Ref and returns you 'type' part.
-func (r Ref) GetType() string {
+// NewRef construct the reference with type, path and task.
+// If ref. cannot be constructed because e.g. path is empty string,
+// the output will be empty Ref
+func NewRef(typ string, path string, task string) Ref {
+	refStr := path
+	if typ != "" {
+		refStr = typ + ":" +path
+	}
+
+	if task != "" {
+		refStr = refStr + ":" + task
+	}
+
+	return Ref(refStr)
+}
+
+// GetWorkspace parse the Ref and returns you 'workspace' part.
+// If it's empty string, that means 'this' workspace
+func (r Ref) GetWorkspace() string {
 	var typ = ""
 	idx := strings.Index(string(r), "://")
 	if idx > 0 {
@@ -21,7 +39,7 @@ func (r Ref) GetType() string {
 	return typ
 }
 
-// GetPath returns you path part in ref which is 'path/to/subdir' in 'type://path/to/subdir:task'
+// GetPath returns you path part in ref which is 'path/to/subdir' in 'ws://path/to/subdir:task'
 func (r Ref) GetPath() string {
 	var path = ""
 	start := strings.Index(string(r), "//")
@@ -37,7 +55,7 @@ func (r Ref) GetPath() string {
 }
 
 // GetTask returns you task, if there is some task present. The task is
-// placed as last part in ref 'type://path/to/app:task'
+// placed as last part in ref 'ws://path/to/app:task'
 func (r Ref) GetTask() string {
 	start := strings.LastIndex(string(r), ":")
 	task := string(r)[start+1:]
@@ -53,8 +71,8 @@ func (r Ref) GetTask() string {
 // The old task will be changed.
 func (r Ref) SetTask(task string) Ref {
 	out := ""
-	if r.GetType() != "" {
-		out += r.GetType() + ":"
+	if r.GetWorkspace() != "" {
+		out += r.GetWorkspace() + ":"
 	}
 
 	out += "//" + r.GetPath() + ":" + task
