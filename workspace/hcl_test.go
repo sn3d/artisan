@@ -17,14 +17,14 @@ func TestLoadModule(t *testing.T) {
 		t.Errorf("We've got error %v", err)
 	}
 
-	// ... and one task is "@go" class named as "build"
+	// ... and one task is "@go" faction named as "build"
 	buildTask := module.Task("build")
 	if buildTask == nil {
 		t.Errorf("there is no 'build' task!")
 	}
 
-	if buildTask.Class != "@go" {
-		t.Errorf("the build task is not 'jdk8' class")
+	if buildTask.FactionName != "@go" {
+		t.Errorf("the build task is not 'jdk8' faction")
 	}
 }
 

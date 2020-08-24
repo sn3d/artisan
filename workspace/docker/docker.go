@@ -9,10 +9,11 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/unravela/delvin/api"
 	"os"
+	"strings"
 )
 
 // ImagePrefix is used in all docker images generated from source. If
-// class is named as "node", the image will be "dlvin-node:latest"
+// faction is named as "node", the image will be "dlvin-node:latest"
 const ImagePrefix = "dlvin-"
 
 func pullImage(docker *client.Client, image string) (*api.Image, error) {
@@ -29,7 +30,7 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 	ctx := context.Background()
 	res, err := docker.ImagePull(ctx, img, types.ImagePullOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("cannot pull class image %w", err)
+		return nil, fmt.Errorf("cannot pull faction image %w", err)
 	}
 
 	// print the image build result to output
@@ -61,7 +62,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	})
 
 	// build image
-	tags := []string{classNameToTag(name)}
+	tags := []string{factionToTag(name)}
 	res, err := docker.ImageBuild(ctx, bctx, types.ImageBuildOptions{
 		Dockerfile: "./Dockerfile",
 		NoCache:    true,
@@ -69,7 +70,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("Cannot build class %w", err)
+		return nil, fmt.Errorf("Cannot build faction %w", err)
 	}
 
 	// print the image build result to output
@@ -79,7 +80,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 		fmt.Printf("\033[2K\r    > %s",  txt)
 	}
 
-	imageId := getImageID(docker, classNameToTag(name))
+	imageId := getImageID(docker, factionToTag(name))
 	out := &api.Image{
 		ID: imageId,
 	}
@@ -87,7 +88,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	return out, nil
 }
 
-// function returns you docker image ID for class.
+// function returns you docker image ID for faction.
 // This is needed e.g. when you want to perform task and task is
 // running in forge.
 //
@@ -115,8 +116,11 @@ func getImageID(docker *client.Client, image string) string {
 	return ""
 }
 
-// This function transform class name e.g. 'jdk8' to
+// This function transform faction name e.g. '@jdk8' to
 // docker tag 'dlvin-jdk8:latest'
-func classNameToTag(name string) string {
+func factionToTag(name string) string {
+	if strings.HasPrefix(name, "@") {
+		name = name[1:]
+	}
 	return ImagePrefix + name + ":latest"
 }

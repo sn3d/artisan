@@ -16,7 +16,7 @@ const (
 type WorkspaceHCL struct {
 
 	// hold the forges defined in this workspace
-	Classes []*api.Class `hcl:"class,block"`
+	Factions []*api.Faction `hcl:"faction,block"`
 
 	// hold the main module in workspace file
 	MainModule *api.Module `hcl:"module,block"`
@@ -52,7 +52,7 @@ func loadWorkspaceFromHCL(path string, ws *Workspace) error {
 		return fmt.Errorf("cannot read data from module file reason: %w", err)
 	}
 
-	ws.classes = arrayToClasses(hclData.Classes)
+	ws.factions = api.NewFactions(hclData.Factions)
 	ws.mainModule = hclData.MainModule
 
 	return nil

@@ -16,8 +16,8 @@ type Workspace struct {
 	// workspace file is situated
 	rootDir string
 
-	// hold all available classes definitions for workspace
-	classes Classes
+	// hold all available factions for workspace
+	factions api.Factions
 
 	// mainModule is module with reference '//'
 	mainModule *api.Module
@@ -43,21 +43,21 @@ func Open(currentDir string) (*Workspace, error) {
 	return ws, nil
 }
 
-// Class resolve a class def. for the given name
-func (ws *Workspace) Class(name string) *api.Class {
-	for _, c := range ws.classes {
+// Faction resolve a faction def. for the given name
+func (ws *Workspace) Faction(name string) *api.Faction {
+	for _, c := range ws.factions {
 		if c.Name == name {
 			return c
 		}
 	}
 
-	// class not found - let's transform it into Docker image
-	defaultClass := &api.Class{
+	// faction not found - let's transform it into Docker image
+	defaultFaction := &api.Faction{
 		Name:  name,
 		Image: name,
 	}
 
-	return defaultClass
+	return defaultFaction
 }
 
 // Module returns a module for given ref, no matter if
@@ -206,15 +206,15 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 	fmt.Println("(1/2) Resolve images")
 
 	allTasks := topoSort(task, ws)
-	allClasses := allTasks.GetClasses(ws)
+	allFactions := allTasks.GetFactions(ws)
 	allImages := make(Images)
-	for _, class := range allClasses {
-		imageSrcDir := ws.AbsPath(api.Ref(class.Src))
-		img, err := engine.Registry.Build(class, imageSrcDir)
+	for _, fact := range allFactions {
+		imageSrcDir := ws.AbsPath(api.Ref(fact.Src))
+		img, err := engine.Registry.Build(fact, imageSrcDir)
 		if err != nil {
 			return err
 		}
-		allImages[class.Name] = img
+		allImages[fact.Name] = img
 	}
 
 	// phase 2: run tasks
@@ -227,7 +227,7 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 			break
 		}
 
-		img := allImages[tsk.Class]
+		img := allImages[tsk.FactionName]
 		err := engine.Executor.Exec(tsk, img, ws.rootDir)
 		if err != nil {
 			return err

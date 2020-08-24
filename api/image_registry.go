@@ -1,5 +1,5 @@
 package api
 
 type ImageRegistry interface {
-	Build(c *Class, srcDir string) (*Image, error)
+	Build(f *Faction, srcDir string) (*Image, error)
 }

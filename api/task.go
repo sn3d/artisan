@@ -6,11 +6,10 @@ package api
 // means some files were changed and probably we should re-run the task.
 type TaskHash uint64
 
-// Task determine what to build, what forge to use and specify the dependencies. Tasks are organized in
-// graph.
+// Task determine what to build, what faction to use and specify the dependencies.
 type Task struct {
-	// Class the task belong to. Every task must be associated with some class
-	Class string `hcl:"class,label"`
+	// FactionName point to faction the task is associated with. Every task must be associated with some faction
+	FactionName string `hcl:"faction,label"`
 	// Name of the task
 	Name string `hcl:"name,label"`
 	// Cmd is shell command that is invoked as task

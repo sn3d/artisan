@@ -11,45 +11,45 @@ type ImageRegistry struct {
 	Docker *client.Client
 }
 
-// Build builds the docker image for class. If image already exist, the function
-// just returns you existing class image.
-func (cb *ImageRegistry) Build(cls *api.Class, srcDir string) (*api.Image, error) {
+// Build builds the docker image for faction. If image already exist, the function
+// just returns you existing faction image.
+func (cb *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, error) {
 
-	fmt.Printf(" - '%s': checking...", cls.Name)
+	fmt.Printf(" - '%s': checking...", fact.Name)
 
-	imageID := cb.GetImageID(cls)
+	imageID := cb.GetImageID(fact)
 	if imageID != "" {
 		img := &api.Image{
 			ID: imageID,
 		}
-		fmt.Printf("\033[2K\r - '%s': [OK]\n", cls.Name)
+		fmt.Printf("\033[2K\r - '%s': [OK]\n", fact.Name)
 		return img, nil
 	}
 
 	var img *api.Image
 	var err error
 
-	if cls.Src != "" {
-		fmt.Printf("\033[2K\r - '%s': building...\n", cls.Name)
-		img, err = buildImage(cb.Docker, cls.Name, srcDir)
+	if fact.Src != "" {
+		fmt.Printf("\033[2K\r - '%s': building...\n", fact.Name)
+		img, err = buildImage(cb.Docker, fact.Name, srcDir)
 	} else {
-		fmt.Printf("\033[2K\r - '%s': pulling...\n", cls.Name)
-		img, err = pullImage(cb.Docker, cls.Image)
+		fmt.Printf("\033[2K\r - '%s': pulling...\n", fact.Name)
+		img, err = pullImage(cb.Docker, fact.Image)
 	}
 
 	if err != nil {
-		fmt.Printf("\033[0A\033[2K\r - '%s'': [ERROR]\n", cls.Name)
+		fmt.Printf("\033[0A\033[2K\r - '%s'': [ERROR]\n", fact.Name)
 	} else {
-		fmt.Printf("\033[0A\033[2K\r - '%s': [OK]\n", cls.Name)
+		fmt.Printf("\033[0A\033[2K\r - '%s': [OK]\n", fact.Name)
 	}
 
 	return img, err
 }
 
-func (ir *ImageRegistry) GetImageID(cls *api.Class) string {
-	if cls.Image != "" {
-		return getImageID(ir.Docker, cls.Image)
+func (ir *ImageRegistry) GetImageID(fact *api.Faction) string {
+	if fact.Image != "" {
+		return getImageID(ir.Docker, fact.Image)
 	} else {
-		return getImageID(ir.Docker, classNameToTag(cls.Name))
+		return getImageID(ir.Docker, factionToTag(fact.Name))
 	}
 }

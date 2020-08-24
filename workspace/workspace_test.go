@@ -20,10 +20,10 @@ func TestOpen(t *testing.T) {
 		t.Errorf("Some error occured when opening the workspace ")
 	}
 
-	// ... and we can reach the class
-	class := ws.Class("@go")
-	if class == nil {
-		t.Errorf("We're expecting '@go' class available.")
+	// ... and we can reach the faction
+	fact := ws.Faction("@go")
+	if fact == nil {
+		t.Errorf("We're expecting '@go' fact available.")
 	}
 }
 

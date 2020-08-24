@@ -4,11 +4,11 @@ import "github.com/unravela/delvin/api"
 
 type Tasks []*api.Task
 
-func (t Tasks) GetClasses(ws *Workspace) Classes {
-	classMap := make(map[string]*api.Class)
+func (t Tasks) GetFactions(ws *Workspace) api.Factions {
+	factions := make(api.Factions)
 	for _, task := range t {
-		classDef := ws.Class(task.Class);
-		classMap[task.Class] = classDef
+		factionDef := ws.Faction(task.FactionName);
+		factions[task.FactionName] = factionDef
 	}
-	return classMap
+	return factions
 }

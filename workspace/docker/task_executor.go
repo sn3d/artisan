@@ -17,7 +17,7 @@ type TaskExecutor struct {
 	Docker *client.Client
 }
 
-// NewEnvTaskExecutor initialize class builder with docker client based on
+// NewEnvTaskExecutor initialize faction builder with docker client based on
 // docker env. variables like DOCKER_HOST etc..
 func NewEnvTaskExecutor() (*TaskExecutor, error) {
 	var executor *TaskExecutor
