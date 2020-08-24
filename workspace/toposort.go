@@ -18,7 +18,6 @@ func topoSort(task *api.Task, ws *Workspace) Tasks {
 	getAllDeps(task, ws, topo)
 	topo[task.Ref] = task
 
-	// create indegree map.
 	indegree := map[api.Ref]int{}
 	for _, t := range topo {
 		deps := t.GetDeps()
@@ -27,11 +26,11 @@ func topoSort(task *api.Task, ws *Workspace) Tasks {
 		}
 	}
 
-	// create queue where we will place nodes
+	// queue, where we will place nodes
 	// with no edges.
 	queue := []*api.Task{task}
 
-	// into result we will place tasks in right sorted order
+	// result, where we will place tasks in right sorted order
 	idx := len(topo)
 	result := make([]*api.Task, idx)
 

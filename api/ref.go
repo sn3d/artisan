@@ -6,10 +6,10 @@ import (
 	"strings"
 )
 
-// Ref is reference to module or task. The format is borrowed from
-// Bazel and looks like 'workspace://path/to/module:task', where workspace and task is optional and
-// path is mandatory
-// Normally type is not set and the ref looks like something you know from bazel '//app:task'.
+// Ref is reference to module or task. The format looks like 'workspace://path/to/module:task'.
+// If workspace or path is not defined, we considering the 'current'. That means current workspace,
+// or current module. For instance ':build' in task dependencies refers to same module the dependant
+// task is.
 type Ref string
 
 // NewRef construct the reference with workspace, path and task.

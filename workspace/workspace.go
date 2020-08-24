@@ -51,7 +51,6 @@ func (ws *Workspace) Faction(name string) *api.Faction {
 		}
 	}
 
-	// faction not found - let's transform it into Docker image
 	defaultFaction := &api.Faction{
 		Name:  name,
 		Image: name,

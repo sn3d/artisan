@@ -45,7 +45,7 @@ func (f *Faction) String() string {
 	return f.Name
 }
 
-// NewFactions create set 'Factions' for given array
+// NewFactions convert array to set of 'Factions'
 func NewFactions(arr []*Faction) Factions {
 	factions := make(Factions)
 	for _, c := range arr {
