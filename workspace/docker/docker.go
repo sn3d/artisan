@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"os"
 	"strings"
 )
@@ -37,7 +37,7 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 	scanner := bufio.NewScanner(res)
 	for scanner.Scan() {
 		txt := scanner.Text()
-		fmt.Printf("\033[2K\r    > %s",  txt)
+		fmt.Printf("\033[2K\r    > %s", txt)
 	}
 
 	imageId := getImageID(docker, image)
@@ -77,7 +77,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	scanner := bufio.NewScanner(res.Body)
 	for scanner.Scan() {
 		txt := scanner.Text()
-		fmt.Printf("\033[2K\r    > %s",  txt)
+		fmt.Printf("\033[2K\r    > %s", txt)
 	}
 
 	imageId := getImageID(docker, factionToTag(name))

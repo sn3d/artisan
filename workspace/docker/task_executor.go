@@ -9,7 +9,7 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 )
 
 type TaskExecutor struct {

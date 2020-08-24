@@ -1,6 +1,5 @@
 package workspace
 
-import "github.com/unravela/delvin/api"
+import "github.com/unravela/artisan/api"
 
 type Images map[string]*api.Image
-

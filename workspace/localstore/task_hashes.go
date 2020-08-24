@@ -2,7 +2,7 @@ package localstore
 
 import (
 	"encoding/binary"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"io"
 	"os"
 	"path/filepath"

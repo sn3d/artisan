@@ -1,6 +1,6 @@
 package workspace
 
-import "github.com/unravela/delvin/api"
+import "github.com/unravela/artisan/api"
 
 // Dependencies are creating graph where each task might have
 // edges pointing to another dependency task. Before we run the
@@ -72,7 +72,7 @@ func getAllDeps(task *api.Task, ws *Workspace, allDeps map[api.Ref]*api.Task) {
 		// normalize ref. - enrich path if is't missing
 		ref := api.Ref(dep)
 		if ref.GetPath() == "" {
-			ref = api.NewRef(ref.GetWorkspace(), "//" + task.Ref.GetPath(), ref.GetTask())
+			ref = api.NewRef(ref.GetWorkspace(), "//"+task.Ref.GetPath(), ref.GetTask())
 		}
 
 		depTask, _ := ws.Task(ref)

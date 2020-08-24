@@ -3,14 +3,13 @@ package workspace
 import (
 	"fmt"
 	"github.com/hashicorp/hcl/v2/hclsimple"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"io/ioutil"
 )
 
-
 const (
-	ModuleFile = "module.delvin"
-	WorkspaceFile = "workspace.delvin"
+	ModuleFile    = "MODULE.hcl"
+	WorkspaceFile = "WORKSPACE.hcl"
 )
 
 type WorkspaceHCL struct {
@@ -28,7 +27,7 @@ func LoadModuleFromHCL(path string, m *api.Module) error {
 		return fmt.Errorf("cannot read module file in %s", path)
 	}
 
-	if err = hclsimple.Decode(path+".hcl", data, nil, m); err != nil {
+	if err = hclsimple.Decode(path, data, nil, m); err != nil {
 		return fmt.Errorf("cannot read data from module file reason: %w", err)
 	}
 
@@ -40,7 +39,6 @@ func LoadModuleFromHCL(path string, m *api.Module) error {
 	return nil
 }
 
-
 func loadWorkspaceFromHCL(path string, ws *Workspace) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -48,7 +46,7 @@ func loadWorkspaceFromHCL(path string, ws *Workspace) error {
 	}
 
 	var hclData WorkspaceHCL
-	if err = hclsimple.Decode(path+".hcl", data, nil, &hclData); err != nil {
+	if err = hclsimple.Decode(path, data, nil, &hclData); err != nil {
 		return fmt.Errorf("cannot read data from module file reason: %w", err)
 	}
 

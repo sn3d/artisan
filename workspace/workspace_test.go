@@ -1,7 +1,7 @@
 package workspace_test
 
 import (
-	"github.com/unravela/delvin/workspace"
+	"github.com/unravela/artisan/workspace"
 	"path/filepath"
 	"testing"
 )

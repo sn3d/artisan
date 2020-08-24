@@ -1,8 +1,8 @@
 package run
 
 import (
-	"github.com/unravela/delvin/api"
-	"github.com/unravela/delvin/workspace"
+	"github.com/unravela/artisan/api"
+	"github.com/unravela/artisan/workspace"
 	"github.com/urfave/cli/v2"
 	"os"
 )

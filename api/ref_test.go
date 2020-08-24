@@ -2,16 +2,20 @@ package api_test
 
 import (
 	"fmt"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"strings"
 	"testing"
 )
 
 func ExampleNewRef() {
-	ref1 := api.NewRef("ws1", "//path/to/module", "build"); fmt.Println(ref1)
-	ref2 := api.NewRef("", "//path/to/module", "build"); fmt.Println(ref2)
-	ref3 := api.NewRef("", "//path/to/module", ""); fmt.Println(ref3)
-	ref4 := api.NewRef("", "", "build"); fmt.Println(ref4)
+	ref1 := api.NewRef("ws1", "//path/to/module", "build")
+	fmt.Println(ref1)
+	ref2 := api.NewRef("", "//path/to/module", "build")
+	fmt.Println(ref2)
+	ref3 := api.NewRef("", "//path/to/module", "")
+	fmt.Println(ref3)
+	ref4 := api.NewRef("", "", "build")
+	fmt.Println(ref4)
 
 	// Output:
 	// ws1://path/to/module:build

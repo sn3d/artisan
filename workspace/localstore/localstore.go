@@ -1,7 +1,7 @@
 package localstore
 
 import (
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"os"
 	"path/filepath"
 )
@@ -9,9 +9,8 @@ import (
 const (
 	// DirName is name of the directory used by localstore. This directory
 	// is usually placed in root of your workspace.
-	DirName = ".delvin"
+	DirName = ".artisan"
 )
-
 
 type LocalStore struct {
 	// path to local storage directory where are files for task hashes etc..
@@ -29,7 +28,7 @@ func Open(rootDir string) (*LocalStore, error) {
 
 	dir := filepath.Join(rootDir, DirName)
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err := os.Mkdir(dir, os.ModeDir | 0750)
+		err := os.Mkdir(dir, os.ModeDir|0750)
 		if err != nil {
 			return nil, err
 		}

@@ -2,7 +2,7 @@ package workspace
 
 import (
 	"encoding/binary"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"hash/fnv"
 	"io/ioutil"
 	"os"
@@ -15,15 +15,15 @@ func computeTaskHash(ws *Workspace, task *api.Task) api.TaskHash {
 
 	includes := task.Include
 	if len(includes) == 0 {
-		includes = []string{ "" }
+		includes = []string{""}
 	}
 
 	excludes := task.Exclude
 	if len(excludes) == 0 {
-		excludes = []string{ }
+		excludes = []string{}
 	}
 
-	taskDir := ws.AbsPath(task.Ref) 
+	taskDir := ws.AbsPath(task.Ref)
 	walk(taskDir, "", includes, excludes, func(path string, fi os.FileInfo) {
 		buf.Write([]byte(path))
 

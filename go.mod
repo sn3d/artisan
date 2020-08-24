@@ -1,4 +1,4 @@
-module github.com/unravela/delvin
+module github.com/unravela/artisan
 
 go 1.14
 

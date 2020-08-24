@@ -3,9 +3,9 @@ package workspace
 import (
 	"errors"
 	"fmt"
-	"github.com/unravela/delvin/api"
-	"github.com/unravela/delvin/workspace/docker"
-	"github.com/unravela/delvin/workspace/localstore"
+	"github.com/unravela/artisan/api"
+	"github.com/unravela/artisan/workspace/docker"
+	"github.com/unravela/artisan/workspace/localstore"
 	"os"
 	"path/filepath"
 	"strings"

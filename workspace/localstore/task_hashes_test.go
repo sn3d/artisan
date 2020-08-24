@@ -1,14 +1,14 @@
 package localstore_test
 
 import (
-	"github.com/unravela/delvin/workspace/localstore"
+	"github.com/unravela/artisan/workspace/localstore"
 	"io/ioutil"
 	"testing"
 )
 
 func TestLocalStore_GetAndPut(t *testing.T) {
 	// given open local storage
-	dir,_ := ioutil.TempDir("", "delvin")
+	dir, _ := ioutil.TempDir("", "delvin")
 
 	// when we put some task hash
 	ls, _ := localstore.Open(dir)

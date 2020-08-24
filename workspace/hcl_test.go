@@ -1,7 +1,7 @@
 package workspace
 
 import (
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func TestLoadModule(t *testing.T) {
 	module := &api.Module{
 		Ref: "//apps/webapp",
 	}
-	err := LoadModuleFromHCL("testdata/hcl_test/module.delvin", module)
+	err := LoadModuleFromHCL("testdata/hcl_test/MODULE.hcl", module)
 
 	// then no error is occurred
 	if err != nil {
@@ -27,4 +27,3 @@ func TestLoadModule(t *testing.T) {
 		t.Errorf("the build task is not 'jdk8' faction")
 	}
 }
-

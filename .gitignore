@@ -2,5 +2,5 @@
 frontend/dist/**/*
 frontend/node_modules/**/*
 backend/statik/**/*
-delvin
-.delvin
+.artisan
+artisan

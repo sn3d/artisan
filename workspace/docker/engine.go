@@ -3,7 +3,7 @@ package docker
 import (
 	"fmt"
 	"github.com/docker/docker/client"
-	"github.com/unravela/delvin/api"
+	"github.com/unravela/artisan/api"
 )
 
 // NewEngine initialize engine with docker client
