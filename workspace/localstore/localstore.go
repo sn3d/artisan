@@ -3,7 +3,15 @@ package localstore
 import (
 	"github.com/unravela/delvin/api"
 	"os"
+	"path/filepath"
 )
+
+const (
+	// DirName is name of the directory used by localstore. This directory
+	// is usually placed in root of your workspace.
+	DirName = ".delvin"
+)
+
 
 type LocalStore struct {
 	// path to local storage directory where are files for task hashes etc..
@@ -14,11 +22,17 @@ type LocalStore struct {
 	hashes map[uint64]api.TaskHash
 }
 
-// Open the localstore
-func Open(dir string) (*LocalStore, error) {
+// Open the localstore which is part of the given
+// workspace root directory. The 'rootDir' is path
+// which not include the localstore directory.
+func Open(rootDir string) (*LocalStore, error) {
 
+	dir := filepath.Join(rootDir, DirName)
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		os.Mkdir(dir, os.ModeDir)
+		err := os.Mkdir(dir, os.ModeDir | 0750)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	hashes, err := loadTaskHashes(dir)

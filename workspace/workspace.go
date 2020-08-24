@@ -187,7 +187,7 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 	var task *api.Task
 	var err error
 
-	lstore, err := localstore.Open(filepath.Join(ws.rootDir, ".delvin"))
+	lstore, err := localstore.Open(ws.rootDir)
 	if err != nil {
 		return err
 	}
