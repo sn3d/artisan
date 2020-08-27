@@ -24,6 +24,10 @@ type Task struct {
 	Ref Ref
 }
 
+// Tasks is preffered type for collection of Task
+type Tasks []*Task
+
+
 // GetDeps returns you valid refs. as dependencies
 func (t *Task) GetDeps() []Ref {
 	refs := make([]Ref, len(t.Deps))

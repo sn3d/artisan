@@ -205,8 +205,8 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 	fmt.Println("(1/2) Resolve images")
 
 	allTasks := topoSort(task, ws)
-	allFactions := allTasks.GetFactions(ws)
-	allImages := make(Images)
+	allFactions := ws.extractFactions(allTasks)
+	allImages := make(api.Images)
 	for _, fact := range allFactions {
 		imageSrcDir := ws.AbsPath(api.Ref(fact.Src))
 		img, err := engine.Registry.Build(fact, imageSrcDir)
@@ -247,4 +247,14 @@ func isUpToDate(tsk *api.Task, lstore *localstore.LocalStore, ws *Workspace) boo
 		return true
 	}
 	return false
+}
+
+func (ws *Workspace) extractFactions(t api.Tasks) api.Factions {
+	factions := make(api.Factions)
+	for _, task := range t {
+		factionDef := ws.Faction(task.FactionName)
+		factions[task.FactionName] = factionDef
+	}
+	return factions
+
 }

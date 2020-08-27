@@ -11,7 +11,7 @@ import "github.com/unravela/artisan/api"
 // is reverted. Regular sorting returns you 'a,b,c', this
 // implementation returns you 'c,b,a'
 //
-func topoSort(task *api.Task, ws *Workspace) Tasks {
+func topoSort(task *api.Task, ws *Workspace) api.Tasks {
 
 	// get whole graph of dependencies for 'task'
 	topo := map[api.Ref]*api.Task{}
