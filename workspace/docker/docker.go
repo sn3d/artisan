@@ -13,8 +13,8 @@ import (
 )
 
 // ImagePrefix is used in all docker images generated from source. If
-// faction is named as "node", the image will be "dlvin-node:latest"
-const ImagePrefix = "dlvin-"
+// faction is named as "node", the image will be "artsn-node:latest"
+const ImagePrefix = "artsn-"
 
 func pullImage(docker *client.Client, image string) (*api.Image, error) {
 

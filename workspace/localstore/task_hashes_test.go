@@ -8,7 +8,7 @@ import (
 
 func TestLocalStore_GetAndPut(t *testing.T) {
 	// given open local storage
-	dir, _ := ioutil.TempDir("", "delvin")
+	dir, _ := ioutil.TempDir("", "artisan")
 
 	// when we put some task hash
 	ls, _ := localstore.Open(dir)
