@@ -5,3 +5,4 @@ backend/statik/**/*
 .artisan
 artisan
 dist
+bin
