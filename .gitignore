@@ -4,3 +4,4 @@ frontend/node_modules/**/*
 backend/statik/**/*
 .artisan
 artisan
+dist

@@ -1,0 +1,55 @@
+project_name: artisan
+before:
+  hooks:
+    - go mod download
+    - go test ./...
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+
+    main: ./main.go
+    binary: artisan
+    ldflags:
+      - -X 'main.version={{.Version}}'
+
+    goos:
+      - linux
+      - darwin
+      - windows
+
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: 386
+
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - '^refactor:'
+
+release:
+  github:
+    owner: unravela
+    name: artisan
+  name_template: "{{.ProjectName}}-v{{.Version}}"
