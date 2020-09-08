@@ -1,6 +1,6 @@
 #!/bin/sh
 # This script provides easy installation of the lastest version 
-# of Artisan (if is needed) into current dir, into ./bin folder.
+# of Artisan (if is needed) into /usr/loca/bin directory.
 # It's suitable for any CI/CD tool. You can invoke this script 
 # with command:
 #
@@ -10,7 +10,7 @@
 # Ensure the temp and isntall directory
 echo "Initialize..."
 TMPDIR=$(mktemp -d)
-INSTALLDIR=./bin
+INSTALLDIR=/usr/local/bin
 
 # Download and untar the archive to temp. directory
 echo "Downloading latest..."
