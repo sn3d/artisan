@@ -1,10 +1,10 @@
 #!/bin/sh
 # This script provides easy installation of the lastest version 
-# of Artisan (if is needed) into /usr/loca/bin directory.
+# of Artisan (if is needed) into /usr/local/bin directory.
 # It's suitable for any CI/CD tool. You can invoke this script 
 # with command:
 #
-#      $ curl -sfL https://artisan.unravela.com/install.sh | sh
+#      $ curl -sfL https://artisan.unravela.io/install.sh | sh
 #
 
 # Ensure the temp and isntall directory
