@@ -16,3 +16,10 @@ If you're Linux or Mac OS user, you can use the following command:
 ```bash
 curl -sfL https://artisan.unravela.io/install.sh | sh
 ```
+
+If you're Windows user, you can download [ZIP archive](https://github.com/unravela/artisan/releases/latest) directly or you can use [Scoop](https://scoop.sh/):
+
+```
+scoop bucket add unravela https://github.com/unravela/scoop-bucket
+scoop install artisan
+```

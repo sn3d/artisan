@@ -53,3 +53,11 @@ release:
     owner: unravela
     name: artisan
   name_template: "{{.ProjectName}}-v{{.Version}}"
+
+scoop:
+  bucket:
+    owner: unravela
+    name: scoop-bucket
+  homepage: https://github.com/unravela/artisan
+  description: The build orchestrator for monorepositories and complex codebases
+  license: Apache 2.0
