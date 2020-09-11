@@ -11,13 +11,19 @@ For Artisan, the Java backend and Vue frontend are separated modules with depend
 Both modules have a 'build' task. The Artisan executes tasks within an own docker container. 
 
 ## Installation
-If you're Linux or Mac OS user, you can use the following command:
+If you're **Linux** user, you can use the following command:
 
 ```bash
 curl -sfL https://artisan.unravela.io/install.sh | sh
 ```
 
-If you're Windows user, you can download [ZIP archive](https://github.com/unravela/artisan/releases/latest) directly or you can use [Scoop](https://scoop.sh/):
+If you're **Mac OS** user with [Homebrew](https://brew.sh) installed, you can install Artisan with command:
+
+```bash
+brew install unravela/tap/artisan
+```
+
+If you're **Windows** user, you can download [ZIP archive](https://github.com/unravela/artisan/releases/latest) directly or you can use [Scoop](https://scoop.sh/):
 
 ```
 scoop bucket add unravela https://github.com/unravela/scoop-bucket
