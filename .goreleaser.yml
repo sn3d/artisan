@@ -58,15 +58,17 @@ scoop:
   bucket:
     owner: unravela
     name: scoop-bucket
+    token: "{{ .Env.GH_PAT }}"
   homepage: https://github.com/unravela/artisan
   description: The build orchestrator for monorepositories and complex codebases
   license: Apache 2.0
 
 brews:
   - name: artisan
-    github:
+    tap:
       owner: unravela
       name: homebrew-tap
+      token: "{{ .Env.GH_PAT }}"
     folder: Formula
     homepage: https://github.com/unravela/artisan
     description: The build orchestrator for monorepositories and complex codebases
