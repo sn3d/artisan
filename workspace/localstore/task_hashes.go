@@ -2,18 +2,22 @@ package localstore
 
 import (
 	"encoding/binary"
-	"github.com/unravela/artisan/api"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/unravela/artisan/api"
 )
 
+// PutTaskHash put the hash into local store. If we already have the hash for task,
+// then the hash is overriden
 func (ls *LocalStore) PutTaskHash(taskRef api.Ref, hash api.TaskHash) error {
 	refHash := taskRef.GetHash()
 	ls.hashes[refHash] = hash
 	return ls.saveHashes()
 }
 
+// GetTaskHash returns hash for given task from localstore
 func (ls *LocalStore) GetTaskHash(taskRef api.Ref) api.TaskHash {
 	refHash := taskRef.GetHash()
 	return ls.hashes[refHash]

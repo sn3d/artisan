@@ -1,6 +1,6 @@
 package api
 
-// Faction determine in which environment, whit what tools will be task performed.
+// Faction determine in which environment will be task performed.
 //
 // Let's imagine you want to build NodeJS project. You can define 'build' task
 // that is associated to '@nodejs' faction. This faction is basically definition of
@@ -53,5 +53,3 @@ func NewFactions(arr []*Faction) Factions {
 	}
 	return factions
 }
-
-

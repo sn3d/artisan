@@ -5,11 +5,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/unravela/artisan/api"
-	"os"
-	"strings"
 )
 
 // ImagePrefix is used in all docker images generated from source. If
@@ -19,7 +20,7 @@ const ImagePrefix = "artsn-"
 func pullImage(docker *client.Client, image string) (*api.Image, error) {
 
 	if image == "" {
-		return nil, errors.New("No image is present!")
+		return nil, errors.New("no image is present")
 	}
 
 	// We need canonical name of the image. That means not only something:latest but
@@ -40,9 +41,9 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 		fmt.Printf("\033[2K\r    > %s", txt)
 	}
 
-	imageId := getImageID(docker, image)
+	imageID := getImageID(docker, image)
 	out := &api.Image{
-		ID: imageId,
+		ID: imageID,
 	}
 	return out, nil
 }
@@ -80,9 +81,9 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 		fmt.Printf("\033[2K\r    > %s", txt)
 	}
 
-	imageId := getImageID(docker, factionToTag(name))
+	imageID := getImageID(docker, factionToTag(name))
 	out := &api.Image{
-		ID: imageId,
+		ID: imageID,
 	}
 
 	return out, nil

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
@@ -12,6 +13,7 @@ import (
 	"github.com/unravela/artisan/api"
 )
 
+// TaskExecutor executes tasks via Docker
 type TaskExecutor struct {
 	// ref to docker client that is used for all docker operations
 	Docker *client.Client

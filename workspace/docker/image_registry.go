@@ -2,10 +2,12 @@ package docker
 
 import (
 	"fmt"
+
 	"github.com/docker/docker/client"
 	"github.com/unravela/artisan/api"
 )
 
+// ImageRegistry implementation acessing to docker images
 type ImageRegistry struct {
 	// ref to docker client that is used for all docker operations
 	Docker *client.Client
@@ -13,11 +15,11 @@ type ImageRegistry struct {
 
 // Build builds the docker image for faction. If image already exist, the function
 // just returns you existing faction image.
-func (cb *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, error) {
+func (ir *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, error) {
 
 	fmt.Printf(" - '%s': checking...", fact.Name)
 
-	imageID := cb.GetImageID(fact)
+	imageID := ir.GetImageID(fact)
 	if imageID != "" {
 		img := &api.Image{
 			ID: imageID,
@@ -31,10 +33,10 @@ func (cb *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, er
 
 	if fact.Src != "" {
 		fmt.Printf("\033[2K\r - '%s': building...\n", fact.Name)
-		img, err = buildImage(cb.Docker, fact.Name, srcDir)
+		img, err = buildImage(ir.Docker, fact.Name, srcDir)
 	} else {
 		fmt.Printf("\033[2K\r - '%s': pulling...\n", fact.Name)
-		img, err = pullImage(cb.Docker, fact.Image)
+		img, err = pullImage(ir.Docker, fact.Image)
 	}
 
 	if err != nil {
@@ -46,10 +48,10 @@ func (cb *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, er
 	return img, err
 }
 
+// GetImageID returns you docker image ID for given faction
 func (ir *ImageRegistry) GetImageID(fact *api.Faction) string {
 	if fact.Image != "" {
 		return getImageID(ir.Docker, fact.Image)
-	} else {
-		return getImageID(ir.Docker, factionToTag(fact.Name))
 	}
+	return getImageID(ir.Docker, factionToTag(fact.Name))
 }

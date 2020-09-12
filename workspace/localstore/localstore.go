@@ -1,9 +1,10 @@
 package localstore
 
 import (
-	"github.com/unravela/artisan/api"
 	"os"
 	"path/filepath"
+
+	"github.com/unravela/artisan/api"
 )
 
 const (
@@ -12,6 +13,7 @@ const (
 	DirName = ".artisan"
 )
 
+// LocalStore instance provide you access to all working data like task hashes etc..
 type LocalStore struct {
 	// path to local storage directory where are files for task hashes etc..
 	dir string

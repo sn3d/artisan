@@ -3,14 +3,17 @@ package workspace
 import (
 	"errors"
 	"fmt"
-	"github.com/unravela/artisan/api"
-	"github.com/unravela/artisan/workspace/docker"
-	"github.com/unravela/artisan/workspace/localstore"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/unravela/artisan/api"
+	"github.com/unravela/artisan/workspace/docker"
+	"github.com/unravela/artisan/workspace/localstore"
 )
 
+// Workspace is main facade and provide most of the Artisan functionality over
+// opened workspace
 type Workspace struct {
 	// absolute path to root of the workspace. This is a dir where
 	// workspace file is situated

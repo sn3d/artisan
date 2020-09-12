@@ -2,11 +2,12 @@ package docker
 
 import (
 	"fmt"
+
 	"github.com/docker/docker/client"
 	"github.com/unravela/artisan/api"
 )
 
-// NewEngine initialize engine with docker client
+// SetupEngine initialize engine with docker client
 func SetupEngine(engine *api.Engine) error {
 
 	dockr, err := client.NewEnvClient()

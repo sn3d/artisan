@@ -8,5 +8,5 @@ type Image struct {
 	ID string
 }
 
+// Images is used as image collection
 type Images map[string]*Image
-

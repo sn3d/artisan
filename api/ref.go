@@ -19,7 +19,7 @@ func NewRef(ws string, path string, task string) Ref {
 	refStr := path
 
 	if ws != "" {
-		refStr = ws + ":" +path
+		refStr = ws + ":" + path
 	}
 
 	if task != "" {
@@ -91,7 +91,7 @@ func (r Ref) GetHash() uint64 {
 	return h.Sum64()
 }
 
-// this function gives you absolute path of
+// AbsPath function gives you absolute path of
 // reference in form '/abspath/to/module` on Windows and Unix systems.
 // This function need workspace root directory for determining absolute path.
 func (r Ref) AbsPath(rootDir string) string {
@@ -101,6 +101,7 @@ func (r Ref) AbsPath(rootDir string) string {
 	return path
 }
 
+// IsOnlyTask returns you true if Ref is in form ":build"
 func (r Ref) IsOnlyTask() bool {
 	return strings.HasPrefix(string(r), ":")
 }
