@@ -1,5 +1,8 @@
 # Artisan
 
+![build](https://github.com/unravela/artisan/workflows/build/badge.svg)
+
+
 Artisan is a build orchestrator for mono repositories powered by Docker.
 Artisan helps you build complex codebases without the need to install all build tools.
  
