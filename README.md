@@ -1,7 +1,7 @@
 # Artisan
 
 [![Release](https://img.shields.io/github/release/unravela/artisan.svg?style=flat-square)](https://github.com/unravela/artisan/releases/latest)
-[![Build](https://img.shields.io/github/workflow/status/unravela/artisan/build?style=flat-square)](/actions?query=workflow%3Abuild)
+[![Build](https://img.shields.io/github/workflow/status/unravela/artisan/build?style=flat-square)](https://github.com/unravela/artisan/actions?query=workflow%3Abuild)
 
 
 Artisan is a build orchestrator for mono repositories powered by Docker.
