@@ -1,4 +1,4 @@
-package workspace
+package hcl
 
 import (
 	"github.com/unravela/artisan/api"
@@ -10,7 +10,7 @@ func TestLoadModule(t *testing.T) {
 	module := &api.Module{
 		Ref: "//apps/webapp",
 	}
-	err := LoadModuleFromHCL("testdata/hcl_test/MODULE.hcl", module)
+	err := LoadModule("testdata/hcl_test/MODULE.hcl", module)
 
 	// then no error is occurred
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 
 const (
 	// DirName is name of the directory used by localstore. This directory
-	// is usually placed in root of your workspace.
+	// is usually placed in root of your artisan.
 	DirName = ".artisan"
 )
 
@@ -24,7 +24,7 @@ type LocalStore struct {
 }
 
 // Open the localstore which is part of the given
-// workspace root directory. The 'rootDir' is path
+// artisan root directory. The 'rootDir' is path
 // which not include the localstore directory.
 func Open(rootDir string) (*LocalStore, error) {
 

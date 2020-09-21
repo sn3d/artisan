@@ -1,7 +1,7 @@
 package localstore_test
 
 import (
-	"github.com/unravela/artisan/workspace/localstore"
+	"github.com/unravela/artisan/artisan/localstore"
 	"io/ioutil"
 	"testing"
 )

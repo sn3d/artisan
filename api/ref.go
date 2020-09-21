@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-// Ref is reference to module or task. The format looks like 'workspace://path/to/module:task'.
-// If workspace or path is not defined, we considering the 'current'. That means current workspace,
+// Ref is reference to module or task. The format looks like 'artisan://path/to/module:task'.
+// If artisan or path is not defined, we considering the 'current'. That means current artisan,
 // or current module. For instance ':build' in task dependencies refers to same module the dependant
 // task is.
 type Ref string
 
-// NewRef construct the reference with workspace, path and task.
+// NewRef construct the reference with artisan, path and task.
 // If ref. cannot be constructed because e.g. path is empty string,
 // the output will be empty Ref
 func NewRef(ws string, path string, task string) Ref {
@@ -29,8 +29,8 @@ func NewRef(ws string, path string, task string) Ref {
 	return Ref(refStr)
 }
 
-// GetWorkspace parse the Ref and returns you 'workspace' part.
-// If it's empty string, that means 'this' workspace
+// GetWorkspace parse the Ref and returns you 'artisan' part.
+// If it's empty string, that means 'this' artisan
 func (r Ref) GetWorkspace() string {
 	var typ = ""
 	idx := strings.Index(string(r), "://")
@@ -93,7 +93,7 @@ func (r Ref) GetHash() uint64 {
 
 // AbsPath function gives you absolute path of
 // reference in form '/abspath/to/module` on Windows and Unix systems.
-// This function need workspace root directory for determining absolute path.
+// This function need artisan root directory for determining absolute path.
 func (r Ref) AbsPath(rootDir string) string {
 	path := filepath.Join(rootDir, r.GetPath())
 	path, _ = filepath.Abs(path)

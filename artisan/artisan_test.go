@@ -1,23 +1,23 @@
-package workspace_test
+package artisan_test
 
 import (
-	"github.com/unravela/artisan/workspace"
+	"github.com/unravela/artisan/artisan"
 	"path/filepath"
 	"testing"
 )
 
 func TestOpen(t *testing.T) {
-	// when we try to open workspace from subdirectory
-	ws, err := workspace.Open("testdata/workspace_test/apps/frontend")
+	// when we try to open artisan from subdirectory
+	ws, err := artisan.OpenWorkspace("testdata/workspace_test/apps/frontend")
 
 	// then no error is occurred
 	if err != nil {
-		t.Errorf("Some error occured when we wanted open the workspace")
+		t.Errorf("Some error occured when we wanted open the artisan")
 	}
 
-	// ... and workspace need to be initialized
+	// ... and artisan need to be initialized
 	if ws == nil {
-		t.Errorf("Some error occured when opening the workspace ")
+		t.Errorf("Some error occured when opening the artisan ")
 	}
 
 	// ... and we can reach the faction
@@ -28,23 +28,23 @@ func TestOpen(t *testing.T) {
 }
 
 func TestOpenInvalidFolder(t *testing.T) {
-	// when we try to open random folder out of the workspace
-	ws, err := workspace.Open("testdata")
+	// when we try to open random folder out of the artisan
+	ws, err := artisan.OpenWorkspace("testdata")
 
 	// then error is occurred
 	if err == nil {
 		t.Errorf("Weird, there is no error")
 	}
 
-	// ... and no workspace is open
+	// ... and no artisan is open
 	if ws != nil {
-		t.Errorf("Some workspace was open")
+		t.Errorf("Some artisan was open")
 	}
 }
 
 func TestWorkspace_Task(t *testing.T) {
-	// given workspace of simple repository
-	ws, err := workspace.Open("testdata/workspace_test")
+	// given artisan of simple repository
+	ws, err := artisan.OpenWorkspace("testdata/workspace_test")
 	if err != nil {
 		t.Errorf("Cannot open repository")
 	}
@@ -62,8 +62,8 @@ func TestWorkspace_Task(t *testing.T) {
 }
 
 func TestWorkspace_FindModule(t *testing.T) {
-	// given open workspace
-	ws, _ := workspace.Open("testdata/workspace_test")
+	// given open artisan
+	ws, _ := artisan.OpenWorkspace("testdata/workspace_test")
 
 	// when we look for module of /apps/frontend/src folder
 	mref := ws.FindModule("testdata/workspace_test/apps/frontend/src")
@@ -76,7 +76,7 @@ func TestWorkspace_FindModule(t *testing.T) {
 
 func TestWorkspace_AbsPathToRef(t *testing.T) {
 	// when we get the ref for absolute path ./apps/backend
-	ws, _ := workspace.Open("testdata/workspace_test")
+	ws, _ := artisan.OpenWorkspace("testdata/workspace_test")
 	abspath, _ := filepath.Abs("testdata/workspace_test/apps/backend")
 	ref := ws.AbsPathToRef(abspath)
 

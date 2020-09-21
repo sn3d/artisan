@@ -1,4 +1,4 @@
-package workspace
+package hcl
 
 import (
 	"fmt"
@@ -19,16 +19,16 @@ const (
 // workspaceData is main HCL structure for WORKSPACE.hcl file
 type workspaceData struct {
 
-	// hold the forges defined in this workspace
+	// hold the forges defined in this artisan
 	Factions []*api.Faction `hcl:"faction,block"`
 
-	// hold the main module in workspace file
+	// hold the main module in artisan file
 	MainModule *api.Module `hcl:"module,block"`
 }
 
-// LoadModuleFromHCL consumes absolute path to MODULE.hcl and
+// LoadModule consumes absolute path to MODULE.hcl and
 // fill thee module structure with data
-func LoadModuleFromHCL(path string, m *api.Module) error {
+func LoadModule(path string, m *api.Module) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("cannot read module file in %s", path)
@@ -46,7 +46,7 @@ func LoadModuleFromHCL(path string, m *api.Module) error {
 	return nil
 }
 
-func loadWorkspaceFromHCL(path string, ws *Workspace) error {
+func LoadWorkspace(path string, ws *api.Workspace) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("cannot read module file in %s", path)
@@ -57,8 +57,8 @@ func loadWorkspaceFromHCL(path string, ws *Workspace) error {
 		return fmt.Errorf("cannot read data from module file reason: %w", err)
 	}
 
-	ws.factions = api.NewFactions(hclData.Factions)
-	ws.mainModule = hclData.MainModule
+	ws.Factions = api.NewFactions(hclData.Factions)
+	ws.MainModule = hclData.MainModule
 
 	return nil
 }

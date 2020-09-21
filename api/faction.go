@@ -6,7 +6,7 @@ package api
 // that is associated to '@nodejs' faction. This faction is basically definition of
 // docker image where project will be mounted and build.
 //
-// Example of '@nodejs' faction in workspace file:
+// Example of '@nodejs' faction in artisan file:
 //
 //    faction "@nodejs" {
 //       src: "//factions/nodejs

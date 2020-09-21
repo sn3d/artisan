@@ -2,7 +2,7 @@ package run
 
 import (
 	"github.com/unravela/artisan/api"
-	"github.com/unravela/artisan/workspace"
+	"github.com/unravela/artisan/artisan"
 	"github.com/urfave/cli/v2"
 	"os"
 )
@@ -20,10 +20,10 @@ var RunCmd = &cli.Command{
 	Action:    RunAction,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:        "workspace-dir",
+			Name:        "artisan-dir",
 			Aliases:     []string{"d"},
 			Value:       "",
-			Usage:       "Path to workspace directory, by default it's current directory.",
+			Usage:       "Path to artisan directory, by default it's current directory.",
 			Destination: &opts.CurrentDir,
 		},
 	},
@@ -35,7 +35,7 @@ func RunAction(ctx *cli.Context) error {
 
 // Run the given task
 func Run(task string, opts RunOpts) error {
-	ws, err := workspace.Open(opts.CurrentDir)
+	ws, err := artisan.Open(opts.CurrentDir)
 	if err != nil {
 		return err
 	}

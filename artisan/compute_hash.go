@@ -1,4 +1,4 @@
-package workspace
+package artisan
 
 import (
 	"encoding/binary"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func computeTaskHash(ws *Workspace, task *api.Task) api.TaskHash {
+func computeTaskHash(inst *Artisan, task *api.Task) api.TaskHash {
 	buf := fnv.New64a()
 
 	includes := task.Include
@@ -23,7 +23,7 @@ func computeTaskHash(ws *Workspace, task *api.Task) api.TaskHash {
 		excludes = []string{}
 	}
 
-	taskDir := ws.AbsPath(task.Ref)
+	taskDir := inst.AbsPath(task.Ref)
 	walk(taskDir, "", includes, excludes, func(path string, fi os.FileInfo) {
 		buf.Write([]byte(path))
 

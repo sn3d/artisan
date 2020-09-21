@@ -28,10 +28,10 @@ func TestRef_GetType(t *testing.T) {
 	// given ref. with 'git' type
 	ref := api.Ref("ws1://app/custom:build")
 
-	// when we get workspace
+	// when we get artisan
 	typ := ref.GetWorkspace()
 
-	// then workspace must be 'ws1'
+	// then artisan must be 'ws1'
 	if typ != "ws1" {
 		t.FailNow()
 	}

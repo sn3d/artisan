@@ -1,16 +1,17 @@
 package main
 
 import (
-	"os"
-
-	"github.com/unravela/artisan/workspace"
+	"github.com/unravela/artisan/artisan"
 )
 
 func main() {
-	ws, _ := workspace.Open("../artisan-monorepo-demo")
-	err := ws.Run("//apps/shop-ui/frontend:build")
-
+	ws, err := artisan.OpenWorkspace("../artisan-monorepo-demo")
 	if err != nil {
-		os.Exit(-1)
+		panic(err)
+	}
+
+	err = ws.Run("//apps/shop-ui/frontend:build")
+	if err != nil {
+		panic(err)
 	}
 }

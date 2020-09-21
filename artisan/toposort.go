@@ -1,4 +1,4 @@
-package workspace
+package artisan
 
 import "github.com/unravela/artisan/api"
 
@@ -11,11 +11,11 @@ import "github.com/unravela/artisan/api"
 // is reverted. Regular sorting returns you 'a,b,c', this
 // implementation returns you 'c,b,a'
 //
-func topoSort(task *api.Task, ws *Workspace) api.Tasks {
+func topoSort(task *api.Task, inst *Artisan) api.Tasks {
 
 	// get whole graph of dependencies for 'task'
 	topo := map[api.Ref]*api.Task{}
-	getAllDeps(task, ws, topo)
+	getAllDeps(task, inst, topo)
 	topo[task.Ref] = task
 
 	indegree := map[api.Ref]int{}
@@ -52,7 +52,7 @@ func topoSort(task *api.Task, ws *Workspace) api.Tasks {
 					depRef = api.NewRef(task.Ref.GetWorkspace(), task.Ref.GetPath(), depRef.GetTask())
 				}
 
-				appt, _ := ws.Task(depRef)
+				appt, _ := inst.Task(depRef)
 				queue = append(queue, appt)
 			}
 		}
@@ -65,7 +65,7 @@ func topoSort(task *api.Task, ws *Workspace) api.Tasks {
 	return result
 }
 
-func getAllDeps(task *api.Task, ws *Workspace, allDeps map[api.Ref]*api.Task) {
+func getAllDeps(task *api.Task, inst *Artisan, allDeps map[api.Ref]*api.Task) {
 	allDeps[task.Ref] = task
 
 	for _, dep := range task.Deps {
@@ -75,8 +75,8 @@ func getAllDeps(task *api.Task, ws *Workspace, allDeps map[api.Ref]*api.Task) {
 			ref = api.NewRef(ref.GetWorkspace(), "//"+task.Ref.GetPath(), ref.GetTask())
 		}
 
-		depTask, _ := ws.Task(ref)
-		getAllDeps(depTask, ws, allDeps)
+		depTask, _ := inst.Task(ref)
+		getAllDeps(depTask, inst, allDeps)
 	}
 
 	return

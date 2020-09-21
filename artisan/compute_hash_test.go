@@ -1,4 +1,4 @@
-package workspace
+package artisan
 
 import (
 	"fmt"
@@ -51,7 +51,7 @@ func Test_Walk(t *testing.T) {
 		"frontend/node_modules",
 	}
 
-	// when we walk through 'go_with_javascript' workspace
+	// when we walk through 'go_with_javascript' artisan
 	count := 0
 	walk("testdata/compute_hash_test", "", includes, excludes, func(path string, f os.FileInfo) {
 		count++

@@ -1,54 +1,53 @@
-package workspace
+package artisan
 
 import (
 	"errors"
 	"fmt"
+	"github.com/unravela/artisan/api"
+	"github.com/unravela/artisan/artisan/docker"
+	"github.com/unravela/artisan/artisan/localstore"
+	"github.com/unravela/artisan/artisan/configfile/hcl"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/unravela/artisan/api"
-	"github.com/unravela/artisan/workspace/docker"
-	"github.com/unravela/artisan/workspace/localstore"
 )
 
-// Workspace is main facade and provide most of the Artisan functionality over
-// opened workspace
-type Workspace struct {
+// Artisan is main facade and provide most of the functionality over
+// opened artisan
+type Artisan struct {
 	// absolute path to root of the workspace. This is a dir where
 	// workspace file is situated
-	rootDir string
+	//rootDir string
 
-	// hold all available factions for workspace
-	factions api.Factions
-
-	// mainModule is module with reference '//'
-	mainModule *api.Module
+	// hold the opened workspace
+	workspace api.Workspace
 }
 
-// Open opens the workspace. If you're in subdirectory of workspace, the
-// function will traverse upside until workspace root is found.
-func Open(currentDir string) (*Workspace, error) {
+// Open opens the artisan. If you're in subdirectory of artisan, the
+// function will traverse upside until artisan root is found.
+func OpenWorkspace(currentDir string) (*Artisan, error) {
 	rootDir, err := findWorkspaceRoot(currentDir)
 	if err != nil {
-		return nil, errors.New("Cannot open workspace")
+		return nil, errors.New("Cannot open artisan")
 	}
 
-	ws := &Workspace{
-		rootDir: rootDir,
+	instance := &Artisan{
+		workspace: api.Workspace{
+			RootDir: rootDir,
+		},
 	}
 
-	hclFile := filepath.Join(rootDir, WorkspaceFile)
-	if err = loadWorkspaceFromHCL(hclFile, ws); err != nil {
+	hclFile := filepath.Join(rootDir, hcl.WorkspaceFile)
+	if err = hcl.LoadWorkspace(hclFile, &instance.workspace); err != nil {
 		return nil, err
 	}
 
-	return ws, nil
+	return instance, nil
 }
 
 // Faction resolve a faction def. for the given name
-func (ws *Workspace) Faction(name string) *api.Faction {
-	for _, c := range ws.factions {
+func (inst *Artisan) Faction(name string) *api.Faction {
+	for _, c := range inst.workspace.Factions {
 		if c.Name == name {
 			return c
 		}
@@ -64,19 +63,19 @@ func (ws *Workspace) Faction(name string) *api.Faction {
 
 // Module returns a module for given ref, no matter if
 // ref. contains also task. If the module is root '//', then
-// it's returned main module within workspace file
-func (ws *Workspace) Module(ref api.Ref) (*api.Module, error) {
+// it's returned main module within artisan file
+func (inst *Artisan) Module(ref api.Ref) (*api.Module, error) {
 	var module *api.Module
 
 	if ref.GetPath() == "" {
-		module = ws.mainModule
+		module = inst.workspace.MainModule
 	} else {
 		module = &api.Module{
 			Ref: ref,
 		}
 
-		hclFile := filepath.Join(ws.AbsPath(ref), ModuleFile)
-		err := LoadModuleFromHCL(hclFile, module)
+		hclFile := filepath.Join(inst.AbsPath(ref), hcl.ModuleFile)
+		err := hcl.LoadModule(hclFile, module)
 		if err != nil {
 			return nil, err
 		}
@@ -88,17 +87,17 @@ func (ws *Workspace) Module(ref api.Ref) (*api.Module, error) {
 // FindModule find a module for given path. This
 // function will traverse up by parent directories until the module
 // is found.
-func (ws *Workspace) FindModule(path string) api.Ref {
-	root, err := findRootFor(path, ModuleFile)
+func (inst *Artisan) FindModule(path string) api.Ref {
+	root, err := findRootFor(path, hcl.ModuleFile)
 	if err != nil {
 		return ""
 	}
-	return ws.AbsPathToRef(root)
+	return inst.AbsPathToRef(root)
 }
 
 // Task gives you task by given reference. If there is no
 // task, the null is returned.
-func (ws *Workspace) Task(ref api.Ref) (*api.Task, error) {
+func (ws *Artisan) Task(ref api.Ref) (*api.Task, error) {
 	tskName := ref.GetTask()
 	if tskName == "" {
 		return nil, fmt.Errorf("Task is not defined")
@@ -117,14 +116,14 @@ func (ws *Workspace) Task(ref api.Ref) (*api.Task, error) {
 	return task, nil
 }
 
-// this function traverse upside over directories until we found directory with workspace file.
+// this function traverse upside over directories until we found directory with artisan file.
 // The reason why we need to traverse-up the directories is because
 // user might call command in any subdirectory of repository.
 //
 // Function is returning absolute path of root directory or empty string with
-// error if there is no workspace file.
+// error if there is no artisan file.
 func findWorkspaceRoot(path string) (string, error) {
-	return findRootFor(path, WorkspaceFile)
+	return findRootFor(path, hcl.WorkspaceFile)
 }
 
 // This function traverse upside over parent directories of given path until we
@@ -136,12 +135,12 @@ func findRootFor(path string, filename string) (string, error) {
 		wsFile := filepath.Join(currentDir, filename)
 		info, err := os.Stat(wsFile)
 
-		// if we found workspace root
+		// if we found artisan root
 		if err == nil && info.Mode().IsRegular() {
 			return currentDir, nil
 		}
 
-		// ... or there is no workspace file
+		// ... or there is no artisan file
 		if os.IsNotExist(err) {
 			// go to upper/parent directory
 			prevDir := currentDir
@@ -166,31 +165,31 @@ func findRootFor(path string, filename string) (string, error) {
 }
 
 // AbsPath returns you absolute path of given ref. e.g. path to '//my/module'.
-func (ws *Workspace) AbsPath(r api.Ref) string {
-	path := filepath.Join(ws.rootDir, r.GetPath())
+func (inst *Artisan) AbsPath(r api.Ref) string {
+	path := filepath.Join(inst.workspace.RootDir, r.GetPath())
 	path, _ = filepath.Abs(path)
 	path = filepath.ToSlash(path)
 	return path
 }
 
 // AbsPathToRef todo
-func (ws *Workspace) AbsPathToRef(abspath string) api.Ref {
-	if !strings.HasPrefix(abspath, ws.rootDir) {
+func (inst *Artisan) AbsPathToRef(abspath string) api.Ref {
+	if !strings.HasPrefix(abspath, inst.workspace.RootDir) {
 		return ""
 	}
 
-	refPath := abspath[len(ws.rootDir):]
+	refPath := abspath[len(inst.workspace.RootDir):]
 	refPath = "/" + filepath.ToSlash(refPath)
 	return api.Ref(refPath)
 }
 
 // Run perform the given task and task's dependencies.
-func (ws *Workspace) Run(taskRef api.Ref) error {
+func (inst *Artisan) Run(taskRef api.Ref) error {
 	var engine api.Engine
 	var task *api.Task
 	var err error
 
-	lstore, err := localstore.Open(ws.rootDir)
+	lstore, err := localstore.Open(inst.workspace.RootDir)
 	if err != nil {
 		return err
 	}
@@ -199,7 +198,7 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 		return err
 	}
 
-	if task, err = ws.Task(taskRef); err != nil {
+	if task, err = inst.Task(taskRef); err != nil {
 		return err
 	}
 
@@ -207,11 +206,11 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 
 	fmt.Println("(1/2) Resolve images")
 
-	allTasks := topoSort(task, ws)
-	allFactions := ws.extractFactions(allTasks)
+	allTasks := topoSort(task, inst)
+	allFactions := inst.extractFactions(allTasks)
 	allImages := make(api.Images)
 	for _, fact := range allFactions {
-		imageSrcDir := ws.AbsPath(api.Ref(fact.Src))
+		imageSrcDir := inst.AbsPath(api.Ref(fact.Src))
 		img, err := engine.Registry.Build(fact, imageSrcDir)
 		if err != nil {
 			return err
@@ -220,44 +219,43 @@ func (ws *Workspace) Run(taskRef api.Ref) error {
 	}
 
 	// phase 2: run tasks
-
 	fmt.Println("(2/2) Run tasks")
 	for _, tsk := range allTasks {
 		// check if task neet to be build
-		if isUpToDate(task, lstore, ws) {
+		if isUpToDate(task, lstore, inst) {
 			fmt.Printf(" - %s: [UP TO DATE]\n", tsk.Ref)
 			break
 		}
 
 		img := allImages[tsk.FactionName]
-		err := engine.Executor.Exec(tsk, img, ws.rootDir)
+		err := engine.Executor.Exec(tsk, img, inst.workspace.RootDir)
 		if err != nil {
 			return err
 		}
 
 		// store the new hash
-		newHash := computeTaskHash(ws, tsk)
+		newHash := computeTaskHash(inst, tsk)
 		lstore.PutTaskHash(tsk.Ref, newHash)
 	}
 
 	return nil
 }
 
-func isUpToDate(tsk *api.Task, lstore *localstore.LocalStore, ws *Workspace) bool {
+func isUpToDate(tsk *api.Task, lstore *localstore.LocalStore, inst *Artisan) bool {
 	storedHash := lstore.GetTaskHash(tsk.Ref)
-	actualHash := computeTaskHash(ws, tsk)
+	actualHash := computeTaskHash(inst, tsk)
 	if storedHash == actualHash {
 		return true
 	}
 	return false
 }
 
-func (ws *Workspace) extractFactions(t api.Tasks) api.Factions {
+func (inst *Artisan) extractFactions(t api.Tasks) api.Factions {
 	factions := make(api.Factions)
 	for _, task := range t {
-		factionDef := ws.Faction(task.FactionName)
+		factionDef := inst.Faction(task.FactionName)
 		factions[task.FactionName] = factionDef
 	}
 	return factions
-
 }
+

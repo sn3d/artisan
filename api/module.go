@@ -1,7 +1,7 @@
 package api
 
 
-// Module basic entity in workspace. It's analogy to module in Maven,
+// Module basic entity in artisan. It's analogy to module in Maven,
 // package in Bazel etc.
 type Module struct {
 	// Tasks is collection of all tasks the module contain
