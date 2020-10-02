@@ -1,3 +1,3 @@
-faction "@go" {
+faction "go" {
     src = "//factions/go"
 }

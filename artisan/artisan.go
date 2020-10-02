@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/unravela/artisan/api"
+	"github.com/unravela/artisan/artisan/configfile"
 	"github.com/unravela/artisan/artisan/docker"
 	"github.com/unravela/artisan/artisan/localstore"
-	"github.com/unravela/artisan/artisan/configfile/hcl"
 	"os"
 	"path/filepath"
 	"strings"
@@ -37,8 +37,7 @@ func OpenWorkspace(currentDir string) (*Artisan, error) {
 		},
 	}
 
-	hclFile := filepath.Join(rootDir, hcl.WorkspaceFile)
-	if err = hcl.LoadWorkspace(hclFile, &instance.workspace); err != nil {
+	if err = configfile.LoadWorkspace(rootDir, &instance.workspace); err != nil {
 		return nil, err
 	}
 
@@ -74,8 +73,8 @@ func (inst *Artisan) Module(ref api.Ref) (*api.Module, error) {
 			Ref: ref,
 		}
 
-		hclFile := filepath.Join(inst.AbsPath(ref), hcl.ModuleFile)
-		err := hcl.LoadModule(hclFile, module)
+		moduleDir := inst.AbsPath(ref)
+		err := configfile.LoadModule(moduleDir, module)
 		if err != nil {
 			return nil, err
 		}
@@ -88,7 +87,7 @@ func (inst *Artisan) Module(ref api.Ref) (*api.Module, error) {
 // function will traverse up by parent directories until the module
 // is found.
 func (inst *Artisan) FindModule(path string) api.Ref {
-	root, err := findRootFor(path, hcl.ModuleFile)
+	root, err := findRootFor(path, configfile.ModuleFile)
 	if err != nil {
 		return ""
 	}
@@ -123,7 +122,7 @@ func (ws *Artisan) Task(ref api.Ref) (*api.Task, error) {
 // Function is returning absolute path of root directory or empty string with
 // error if there is no artisan file.
 func findWorkspaceRoot(path string) (string, error) {
-	return findRootFor(path, hcl.WorkspaceFile)
+	return findRootFor(path, configfile.WorkspaceFile)
 }
 
 // This function traverse upside over parent directories of given path until we

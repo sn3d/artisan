@@ -1,0 +1,10 @@
+environments:
+
+  - name: jdk11
+    src: //envs/jdk11
+
+  - name: protobuf
+    src: //envs/protobuf
+
+  - name: python3
+    image: "python:3.7-alpine"

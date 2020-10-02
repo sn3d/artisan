@@ -1,3 +1,3 @@
-task "@go" "build" {
-    cmd = []
+task "go" "build" {
+    script = "./build.sh"
 }

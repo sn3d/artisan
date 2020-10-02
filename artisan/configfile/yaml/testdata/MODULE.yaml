@@ -1,0 +1,16 @@
+tasks:
+
+  - name: prepare
+    env: jdk11
+    script: ./clean.sh
+    deps:
+      - //apps/some_app:build
+    exclude:
+      - dist
+      - node_modules
+
+  - name: build
+    env: jdk11
+    script: ./build.sh
+    deps:
+      - :prepare

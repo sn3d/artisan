@@ -12,8 +12,8 @@ type Task struct {
 	FactionName string `hcl:"faction,label"`
 	// Name of the task
 	Name string `hcl:"name,label"`
-	// Cmd is shell command that is invoked as task
-	Cmd []string `hcl:"cmd"`
+	// Script is command that is invoked as task. It's executed as shell-form of CMD
+	Script string `hcl:"script"`
 	// Deps is list of other tasks this task depends on
 	Deps []string `hcl:"deps,optional"`
 

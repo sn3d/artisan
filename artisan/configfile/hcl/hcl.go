@@ -2,25 +2,16 @@ package hcl
 
 import (
 	"fmt"
-	"io/ioutil"
-
 	"github.com/hashicorp/hcl/v2/hclsimple"
 	"github.com/unravela/artisan/api"
-)
-
-const (
-	// ModuleFile represent name of the file in each module
-	ModuleFile = "MODULE.hcl"
-
-	// WorkspaceFile represent name of the root file
-	WorkspaceFile = "WORKSPACE.hcl"
+	"io/ioutil"
 )
 
 // workspaceData is main HCL structure for WORKSPACE.hcl file
 type workspaceData struct {
 
 	// hold the forges defined in this artisan
-	Factions []*api.Faction `hcl:"faction,block"`
+	Factions []*api.Faction `hcl:"environment,block"`
 
 	// hold the main module in artisan file
 	MainModule *api.Module `hcl:"module,block"`
@@ -31,7 +22,7 @@ type workspaceData struct {
 func LoadModule(path string, m *api.Module) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("cannot read module file in %s", path)
+		return fmt.Errorf("cannot read module file %s", path)
 	}
 
 	if err = hclsimple.Decode(path, data, nil, m); err != nil {
@@ -49,7 +40,7 @@ func LoadModule(path string, m *api.Module) error {
 func LoadWorkspace(path string, ws *api.Workspace) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("cannot read module file in %s", path)
+		return fmt.Errorf("cannot read module file %s", path)
 	}
 
 	var hclData workspaceData

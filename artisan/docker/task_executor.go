@@ -44,7 +44,7 @@ func (e *TaskExecutor) Exec(t *api.Task, img *api.Image, buildDir string) error 
 		ctx,
 		&container.Config{
 			Image:      img.ID,
-			Cmd:        t.Cmd,
+			Shell:      []string{t.Script},
 			WorkingDir: workingDir,
 		},
 		&container.HostConfig{
