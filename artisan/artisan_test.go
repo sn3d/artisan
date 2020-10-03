@@ -20,10 +20,10 @@ func TestOpen(t *testing.T) {
 		t.Errorf("Some error occured when opening the artisan ")
 	}
 
-	// ... and we can reach the faction
-	fact := ws.Faction("@go")
-	if fact == nil {
-		t.Errorf("We're expecting '@go' fact available.")
+	// ... and we can reach the environment
+	env := ws.Environment("go")
+	if env == nil {
+		t.Errorf("We're expecting 'go' env. available.")
 	}
 }
 

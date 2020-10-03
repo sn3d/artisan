@@ -44,20 +44,20 @@ func OpenWorkspace(currentDir string) (*Artisan, error) {
 	return instance, nil
 }
 
-// Faction resolve a faction def. for the given name
-func (inst *Artisan) Faction(name string) *api.Faction {
-	for _, c := range inst.workspace.Factions {
+// Environment resolve a env. definition for the given name
+func (inst *Artisan) Environment(name string) *api.Environment {
+	for _, c := range inst.workspace.Environments {
 		if c.Name == name {
 			return c
 		}
 	}
 
-	defaultFaction := &api.Faction{
+	defaultEnvironment := &api.Environment{
 		Name:  name,
 		Image: name,
 	}
 
-	return defaultFaction
+	return defaultEnvironment
 }
 
 // Module returns a module for given ref, no matter if
@@ -206,15 +206,15 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 	fmt.Println("(1/2) Resolve images")
 
 	allTasks := topoSort(task, inst)
-	allFactions := inst.extractFactions(allTasks)
+	allEnvs := inst.extractEnvironments(allTasks)
 	allImages := make(api.Images)
-	for _, fact := range allFactions {
-		imageSrcDir := inst.AbsPath(api.Ref(fact.Src))
-		img, err := engine.Registry.Build(fact, imageSrcDir)
+	for _, env := range allEnvs {
+		imageSrcDir := inst.AbsPath(api.Ref(env.Src))
+		img, err := engine.Registry.Build(env, imageSrcDir)
 		if err != nil {
 			return err
 		}
-		allImages[fact.Name] = img
+		allImages[env.Name] = img
 	}
 
 	// phase 2: run tasks
@@ -226,7 +226,7 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 			break
 		}
 
-		img := allImages[tsk.FactionName]
+		img := allImages[tsk.EnvName]
 		err := engine.Executor.Exec(tsk, img, inst.workspace.RootDir)
 		if err != nil {
 			return err
@@ -249,12 +249,12 @@ func isUpToDate(tsk *api.Task, lstore *localstore.LocalStore, inst *Artisan) boo
 	return false
 }
 
-func (inst *Artisan) extractFactions(t api.Tasks) api.Factions {
-	factions := make(api.Factions)
+func (inst *Artisan) extractEnvironments(t api.Tasks) api.Environments {
+	envs := make(api.Environments)
 	for _, task := range t {
-		factionDef := inst.Faction(task.FactionName)
-		factions[task.FactionName] = factionDef
+		envDef := inst.Environment(task.EnvName)
+		envs[task.EnvName] = envDef
 	}
-	return factions
+	return envs
 }
 

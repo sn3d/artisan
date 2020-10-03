@@ -17,13 +17,13 @@ func TestLoadModule(t *testing.T) {
 		t.Errorf("We've got error %v", err)
 	}
 
-	// ... and one task is "go" faction named as "build"
+	// ... and one task isnamed as "build" with "go" env
 	buildTask := module.Task("build")
 	if buildTask == nil {
 		t.Errorf("there is no 'build' task!")
 	}
 
-	if buildTask.FactionName != "go-1.13" {
-		t.Errorf("the build task is not 'jdk8' faction")
+	if buildTask.EnvName != "go-1.13" {
+		t.Errorf("the build task is not 'jdk8' env.")
 	}
 }

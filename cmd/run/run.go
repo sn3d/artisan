@@ -35,7 +35,7 @@ func RunAction(ctx *cli.Context) error {
 
 // Run the given task
 func Run(task string, opts RunOpts) error {
-	ws, err := artisan.Open(opts.CurrentDir)
+	ws, err := artisan.OpenWorkspace(opts.CurrentDir)
 	if err != nil {
 		return err
 	}

@@ -41,7 +41,7 @@ func yamlToModule(yml map[interface{}]interface{}, mod *api.Module) {
 
 func yamlToTask(yml map[interface{}]interface{}, t *api.Task) {
 	t.Name = castToStr(yml["name"])
-	t.FactionName = castToStr(yml["env"])
+	t.EnvName = castToStr(yml["env"])
 	t.Script = castToStr(yml["script"])
 	t.Deps = castToStringArray(yml["deps"])
 	t.Exclude = castToStringArray(yml["exclude"])

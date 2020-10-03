@@ -10,8 +10,8 @@ import (
 // workspaceData is main HCL structure for WORKSPACE.hcl file
 type workspaceData struct {
 
-	// hold the forges defined in this artisan
-	Factions []*api.Faction `hcl:"environment,block"`
+	// hold the environments defined in this artisan as map
+	Environemnts []*api.Environment `hcl:"environment,block"`
 
 	// hold the main module in artisan file
 	MainModule *api.Module `hcl:"module,block"`
@@ -48,7 +48,7 @@ func LoadWorkspace(path string, ws *api.Workspace) error {
 		return fmt.Errorf("cannot read data from module file reason: %w", err)
 	}
 
-	ws.Factions = api.NewFactions(hclData.Factions)
+	ws.Environments = api.NewEnvironments(hclData.Environemnts)
 	ws.MainModule = hclData.MainModule
 
 	return nil

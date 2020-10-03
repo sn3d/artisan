@@ -6,13 +6,15 @@ package api
 // means some files were changed and probably we should re-run the task.
 type TaskHash uint64
 
-// Task determine what to build, what faction to use and specify the dependencies.
+// Task determine what to build, what Environment to use and specify the dependencies.
 type Task struct {
-	// FactionName point to faction the task is associated with. Every task must be associated with some faction
-	FactionName string `hcl:"faction,label"`
+	// EnvName point to env. the task is associated with. Every task must
+	// be associated with some environment
+	EnvName string `hcl:"environment,label"`
 	// Name of the task
 	Name string `hcl:"name,label"`
-	// Script is command that is invoked as task. It's executed as shell-form of CMD
+	// Script is command that is invoked as task. It's executed as shell-form
+	// of CMD
 	Script string `hcl:"script"`
 	// Deps is list of other tasks this task depends on
 	Deps []string `hcl:"deps,optional"`

@@ -1,3 +1,3 @@
-faction "go" {
-    src = "//factions/go"
+environment "go" {
+    src = "//envs/go"
 }

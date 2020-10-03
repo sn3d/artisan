@@ -13,45 +13,45 @@ type ImageRegistry struct {
 	Docker *client.Client
 }
 
-// Build builds the docker image for faction. If image already exist, the function
-// just returns you existing faction image.
-func (ir *ImageRegistry) Build(fact *api.Faction, srcDir string) (*api.Image, error) {
+// Build builds the docker image for environment. If image already exist, the function
+// just returns you existing env. image.
+func (ir *ImageRegistry) Build(env *api.Environment, srcDir string) (*api.Image, error) {
 
-	fmt.Printf(" - '%s': checking...", fact.Name)
+	fmt.Printf(" - '%s': checking...", env.Name)
 
-	imageID := ir.GetImageID(fact)
+	imageID := ir.GetImageID(env)
 	if imageID != "" {
 		img := &api.Image{
 			ID: imageID,
 		}
-		fmt.Printf("\033[2K\r - '%s': [OK]\n", fact.Name)
+		fmt.Printf("\033[2K\r - '%s': [OK]\n", env.Name)
 		return img, nil
 	}
 
 	var img *api.Image
 	var err error
 
-	if fact.Src != "" {
-		fmt.Printf("\033[2K\r - '%s': building...\n", fact.Name)
-		img, err = buildImage(ir.Docker, fact.Name, srcDir)
+	if env.Src != "" {
+		fmt.Printf("\033[2K\r - '%s': building...\n", env.Name)
+		img, err = buildImage(ir.Docker, env.Name, srcDir)
 	} else {
-		fmt.Printf("\033[2K\r - '%s': pulling...\n", fact.Name)
-		img, err = pullImage(ir.Docker, fact.Image)
+		fmt.Printf("\033[2K\r - '%s': pulling...\n", env.Name)
+		img, err = pullImage(ir.Docker, env.Image)
 	}
 
 	if err != nil {
-		fmt.Printf("\033[0A\033[2K\r - '%s'': [ERROR]\n", fact.Name)
+		fmt.Printf("\033[0A\033[2K\r - '%s'': [ERROR]\n", env.Name)
 	} else {
-		fmt.Printf("\033[0A\033[2K\r - '%s': [OK]\n", fact.Name)
+		fmt.Printf("\033[0A\033[2K\r - '%s': [OK]\n", env.Name)
 	}
 
 	return img, err
 }
 
-// GetImageID returns you docker image ID for given faction
-func (ir *ImageRegistry) GetImageID(fact *api.Faction) string {
-	if fact.Image != "" {
-		return getImageID(ir.Docker, fact.Image)
+// GetImageID returns you docker image ID for given environment
+func (ir *ImageRegistry) GetImageID(env *api.Environment) string {
+	if env.Image != "" {
+		return getImageID(ir.Docker, env.Image)
 	}
-	return getImageID(ir.Docker, factionToTag(fact.Name))
+	return getImageID(ir.Docker, envToTag(env.Name))
 }

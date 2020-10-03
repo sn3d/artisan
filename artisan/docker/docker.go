@@ -5,16 +5,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
-	"strings"
-
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/unravela/artisan/api"
+	"os"
 )
 
 // ImagePrefix is used in all docker images generated from source. If
-// faction is named as "node", the image will be "artsn-node:latest"
+// env is named as "node", the image will be "artsn-node:latest"
 const ImagePrefix = "artsn-"
 
 func pullImage(docker *client.Client, image string) (*api.Image, error) {
@@ -31,7 +29,7 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 	ctx := context.Background()
 	res, err := docker.ImagePull(ctx, img, types.ImagePullOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("cannot pull faction image %w", err)
+		return nil, fmt.Errorf("cannot pull image %w", err)
 	}
 
 	// print the image build result to output
@@ -63,7 +61,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	})
 
 	// build image
-	tags := []string{factionToTag(name)}
+	tags := []string{envToTag(name)}
 	res, err := docker.ImageBuild(ctx, bctx, types.ImageBuildOptions{
 		Dockerfile: "./Dockerfile",
 		NoCache:    true,
@@ -71,7 +69,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("Cannot build faction %w", err)
+		return nil, fmt.Errorf("Cannot build env %w", err)
 	}
 
 	// print the image build result to output
@@ -81,7 +79,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 		fmt.Printf("\033[2K\r    > %s", txt)
 	}
 
-	imageID := getImageID(docker, factionToTag(name))
+	imageID := getImageID(docker, envToTag(name))
 	out := &api.Image{
 		ID: imageID,
 	}
@@ -89,7 +87,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	return out, nil
 }
 
-// function returns you docker image ID for faction.
+// function returns you docker image ID for environment.
 // This is needed e.g. when you want to perform task and task is
 // running in forge.
 //
@@ -117,11 +115,8 @@ func getImageID(docker *client.Client, image string) string {
 	return ""
 }
 
-// This function transform faction name e.g. '@jdk8' to
+// This function transform environment name e.g. 'jdk8' to
 // docker tag 'dlvin-jdk8:latest'
-func factionToTag(name string) string {
-	if strings.HasPrefix(name, "@") {
-		name = name[1:]
-	}
+func envToTag(name string) string {
 	return ImagePrefix + name + ":latest"
 }

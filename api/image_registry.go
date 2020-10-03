@@ -1,6 +1,6 @@
 package api
 
-// ImageRegistry hold and provide you images for factions.
+// ImageRegistry hold and provide you images for Environment.
 type ImageRegistry interface {
-	Build(f *Faction, srcDir string) (*Image, error)
+	Build(env *Environment, srcDir string) (*Image, error)
 }
