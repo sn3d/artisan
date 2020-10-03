@@ -45,14 +45,14 @@ func OpenWorkspace(currentDir string) (*Artisan, error) {
 }
 
 // Environment resolve a env. definition for the given name
-func (inst *Artisan) Environment(name string) *api.Environment {
+func (inst *Artisan) Environment(name string) *api.EnvironmentDef {
 	for _, c := range inst.workspace.Environments {
 		if c.Name == name {
 			return c
 		}
 	}
 
-	defaultEnvironment := &api.Environment{
+	defaultEnvironment := &api.EnvironmentDef{
 		Name:  name,
 		Image: name,
 	}
@@ -207,14 +207,14 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 
 	allTasks := topoSort(task, inst)
 	allEnvs := inst.extractEnvironments(allTasks)
-	allImages := make(api.Images)
+	allEnvIDs := make(map[string]api.EnvironmentID)
 	for _, env := range allEnvs {
 		imageSrcDir := inst.AbsPath(api.Ref(env.Src))
-		img, err := engine.Registry.Build(env, imageSrcDir)
+		envID, err := engine.Registry.Build(env, imageSrcDir)
 		if err != nil {
 			return err
 		}
-		allImages[env.Name] = img
+		allEnvIDs[env.Name] = envID
 	}
 
 	// phase 2: run tasks
@@ -226,8 +226,8 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 			break
 		}
 
-		img := allImages[tsk.EnvName]
-		err := engine.Executor.Exec(tsk, img, inst.workspace.RootDir)
+		envID := allEnvIDs[tsk.EnvName]
+		err := engine.Executor.Exec(tsk, envID, inst.workspace.RootDir)
 		if err != nil {
 			return err
 		}
@@ -249,8 +249,8 @@ func isUpToDate(tsk *api.Task, lstore *localstore.LocalStore, inst *Artisan) boo
 	return false
 }
 
-func (inst *Artisan) extractEnvironments(t api.Tasks) api.Environments {
-	envs := make(api.Environments)
+func (inst *Artisan) extractEnvironments(t api.Tasks) api.EnvironmentDefs {
+	envs := make(api.EnvironmentDefs)
 	for _, task := range t {
 		envDef := inst.Environment(task.EnvName)
 		envs[task.EnvName] = envDef

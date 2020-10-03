@@ -15,7 +15,7 @@ func SetupEngine(engine *api.Engine) error {
 		return fmt.Errorf("cannot connect to docker service")
 	}
 
-	engine.Registry = &ImageRegistry{
+	engine.Registry = &EnvironmentRegistry{
 		Docker: dockr,
 	}
 

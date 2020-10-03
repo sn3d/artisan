@@ -35,7 +35,7 @@ func NewEnvTaskExecutor() (*TaskExecutor, error) {
 }
 
 // Exec executes the given task in given image
-func (e *TaskExecutor) Exec(t *api.Task, img *api.Image, buildDir string) error {
+func (e *TaskExecutor) Exec(t *api.Task, envID api.EnvironmentID, buildDir string) error {
 
 	fmt.Printf(" - %s: Preparing...", t.Ref)
 	ctx := context.Background()
@@ -43,7 +43,7 @@ func (e *TaskExecutor) Exec(t *api.Task, img *api.Image, buildDir string) error 
 	resp, err := e.Docker.ContainerCreate(
 		ctx,
 		&container.Config{
-			Image:      img.ID,
+			Image:      string(envID),
 			Shell:      []string{t.Script},
 			WorkingDir: workingDir,
 		},

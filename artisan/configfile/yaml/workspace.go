@@ -22,14 +22,14 @@ func LoadWorkspace(path string, ws *api.Workspace) error {
 	}
 
 	// initialize workspace values
-	ws.Environments = make(api.Environments)
+	ws.Environments = make(api.EnvironmentDefs)
 	ws.MainModule = &api.Module{}
 
 	// translate YAML data and fill in Workspace
 	envs := yamlWs["environments"].([]interface{})
 	for _, values := range envs {
 		valuesMap := castToMap(values)
-		env := &api.Environment{
+		env := &api.EnvironmentDef{
 			Name: castToStr(valuesMap["name"]),
 			Src: castToStr(valuesMap["src"]),
 			Image: castToStr(valuesMap["image"]),

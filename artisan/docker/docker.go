@@ -15,10 +15,10 @@ import (
 // env is named as "node", the image will be "artsn-node:latest"
 const ImagePrefix = "artsn-"
 
-func pullImage(docker *client.Client, image string) (*api.Image, error) {
+func pullImage(docker *client.Client, image string) (api.EnvironmentID, error) {
 
 	if image == "" {
-		return nil, errors.New("no image is present")
+		return "", errors.New("no image is present")
 	}
 
 	// We need canonical name of the image. That means not only something:latest but
@@ -29,7 +29,7 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 	ctx := context.Background()
 	res, err := docker.ImagePull(ctx, img, types.ImagePullOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("cannot pull image %w", err)
+		return "", fmt.Errorf("cannot pull image %w", err)
 	}
 
 	// print the image build result to output
@@ -40,19 +40,17 @@ func pullImage(docker *client.Client, image string) (*api.Image, error) {
 	}
 
 	imageID := getImageID(docker, image)
-	out := &api.Image{
-		ID: imageID,
-	}
-	return out, nil
+	envID := api.EnvironmentID(imageID)
+	return envID, nil
 }
 
 // this function builds docker image for given source dir. The image is build
 // with given name
-func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, error) {
+func buildImage(docker *client.Client, name string, srcDir string) (api.EnvironmentID, error) {
 	ctx := context.Background()
 	// create tar
 	if _, err := os.Stat(srcDir); os.IsNotExist(err) {
-		return nil, fmt.Errorf("invalid path to source dir")
+		return "", fmt.Errorf("invalid path to source dir")
 	}
 
 	bctx := createBuildContext(buildContextOptions{
@@ -69,7 +67,7 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("Cannot build env %w", err)
+		return "", fmt.Errorf("Cannot build env %w", err)
 	}
 
 	// print the image build result to output
@@ -80,14 +78,11 @@ func buildImage(docker *client.Client, name string, srcDir string) (*api.Image, 
 	}
 
 	imageID := getImageID(docker, envToTag(name))
-	out := &api.Image{
-		ID: imageID,
-	}
-
-	return out, nil
+	envID := api.EnvironmentID(imageID)
+	return envID, nil
 }
 
-// function returns you docker image ID for environment.
+// function returns you docker ID for given image name
 // This is needed e.g. when you want to perform task and task is
 // running in forge.
 //
@@ -117,6 +112,6 @@ func getImageID(docker *client.Client, image string) string {
 
 // This function transform environment name e.g. 'jdk8' to
 // docker tag 'dlvin-jdk8:latest'
-func envToTag(name string) string {
+func  envToTag(name string) string {
 	return ImagePrefix + name + ":latest"
 }

@@ -2,7 +2,7 @@ package api
 
 // Engine ...
 type Engine struct {
-	Registry ImageRegistry
+	Registry EnvironmentRegistry
 	Executor TaskExecutor
 }
 

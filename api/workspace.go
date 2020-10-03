@@ -8,7 +8,7 @@ type Workspace struct {
 	RootDir string
 
 	// hold all available environments for artisan
-	Environments Environments
+	Environments EnvironmentDefs
 
 	// mainModule is module with reference '//'
 	MainModule *Module

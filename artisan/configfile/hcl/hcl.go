@@ -11,7 +11,7 @@ import (
 type workspaceData struct {
 
 	// hold the environments defined in this artisan as map
-	Environemnts []*api.Environment `hcl:"environment,block"`
+	Environemnts []*api.EnvironmentDef `hcl:"environment,block"`
 
 	// hold the main module in artisan file
 	MainModule *api.Module `hcl:"module,block"`
