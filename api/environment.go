@@ -31,6 +31,7 @@ package api
 //     task "golang:1.15.0-buster" "build" {
 //         ...
 //     }
+//
 type EnvironmentDef struct {
 	// Name of the environment
 	Name string `hcl:"name,label"`

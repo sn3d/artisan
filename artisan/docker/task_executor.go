@@ -44,7 +44,8 @@ func (e *TaskExecutor) Exec(t *api.Task, envID api.EnvironmentID, buildDir strin
 		ctx,
 		&container.Config{
 			Image:      string(envID),
-			Shell:      []string{t.Script},
+			Cmd:        []string {"/bin/sh", "-c", t.Script},
+			//Shell:      []string{t.Script},
 			WorkingDir: workingDir,
 		},
 		&container.HostConfig{
