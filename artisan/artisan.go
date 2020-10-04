@@ -7,7 +7,6 @@ import (
 	"github.com/unravela/artisan/artisan/configfile"
 	"github.com/unravela/artisan/artisan/docker"
 	"github.com/unravela/artisan/artisan/localstore"
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -15,10 +14,6 @@ import (
 // Artisan is main facade and provide most of the functionality over
 // opened artisan
 type Artisan struct {
-	// absolute path to root of the workspace. This is a dir where
-	// workspace file is situated
-	//rootDir string
-
 	// hold the opened workspace
 	workspace api.Workspace
 }
@@ -87,7 +82,7 @@ func (inst *Artisan) Module(ref api.Ref) (*api.Module, error) {
 // function will traverse up by parent directories until the module
 // is found.
 func (inst *Artisan) FindModule(path string) api.Ref {
-	root, err := findRootFor(path, configfile.ModuleFile)
+	root, err := findRoot(path, isModuleDir)
 	if err != nil {
 		return ""
 	}
@@ -122,45 +117,7 @@ func (ws *Artisan) Task(ref api.Ref) (*api.Task, error) {
 // Function is returning absolute path of root directory or empty string with
 // error if there is no artisan file.
 func findWorkspaceRoot(path string) (string, error) {
-	return findRootFor(path, configfile.WorkspaceFile)
-}
-
-// This function traverse upside over parent directories of given path until we
-// found the folder with the given filename inside.
-func findRootFor(path string, filename string) (string, error) {
-	currentDir, _ := filepath.Abs(path)
-
-	for {
-		wsFile := filepath.Join(currentDir, filename)
-		info, err := os.Stat(wsFile)
-
-		// if we found artisan root
-		if err == nil && info.Mode().IsRegular() {
-			return currentDir, nil
-		}
-
-		// ... or there is no artisan file
-		if os.IsNotExist(err) {
-			// go to upper/parent directory
-			prevDir := currentDir
-			currentDir, err = filepath.Abs(currentDir + "/..")
-
-			// this check is because when we're on top (e.g. '/' or 'c:/')
-			// we need to break the loop. Without this break, the find will enter
-			// into infinity loop where currentDir is always root dir.
-			if prevDir == currentDir {
-				break
-			}
-			continue
-		}
-
-		// ... or some unknown error is raised
-		if err != nil {
-			break
-		}
-	}
-
-	return "", errors.New("Root of woskpace not found")
+	return findRoot(path, isWorkspaceDir)
 }
 
 // AbsPath returns you absolute path of given ref. e.g. path to '//my/module'.

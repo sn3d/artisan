@@ -17,7 +17,7 @@ var RunCmd = &cli.Command{
 	Name:      "run",
 	Usage:     "run the task",
 	ArgsUsage: "[//path/to/module:task or :task]",
-	Action:    RunAction,
+	Action:    runAction,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:        "artisan-dir",
@@ -29,7 +29,7 @@ var RunCmd = &cli.Command{
 	},
 }
 
-func RunAction(ctx *cli.Context) error {
+func runAction(ctx *cli.Context) error {
 	return Run(ctx.Args().First(), opts)
 }
 
