@@ -47,7 +47,7 @@ func topoSort(task *api.Task, inst *Artisan) api.Tasks {
 			indegree[dep]--
 			if indegree[dep] == 0 {
 				// this fragment ensure the ':install' is transformed int '//path/to:install'
-				depRef := api.Ref(dep)
+				depRef := dep
 				if depRef.IsOnlyTask() {
 					depRef = api.NewRef(task.Ref.GetWorkspace(), task.Ref.GetPath(), depRef.GetTask())
 				}
@@ -70,7 +70,7 @@ func getAllDeps(task *api.Task, inst *Artisan, allDeps map[api.Ref]*api.Task) {
 
 	for _, dep := range task.Deps {
 		// normalize ref. - enrich path if is't missing
-		ref := api.Ref(dep)
+		ref := api.StringToRef(dep)
 		if ref.GetPath() == "" {
 			ref = api.NewRef(ref.GetWorkspace(), "//"+task.Ref.GetPath(), ref.GetTask())
 		}

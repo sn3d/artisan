@@ -26,7 +26,7 @@ func ExampleNewRef() {
 
 func TestRef_GetType(t *testing.T) {
 	// given ref. with 'git' type
-	ref := api.Ref("ws1://app/custom:build")
+	ref := api.StringToRef("ws1://app/custom:build")
 
 	// when we get artisan
 	typ := ref.GetWorkspace()
@@ -39,7 +39,7 @@ func TestRef_GetType(t *testing.T) {
 
 func TestRef_GetPath(t *testing.T) {
 	// given complicated ref.
-	ref := api.Ref("ws1://app/custom:build")
+	ref := api.StringToRef("ws1://app/custom:build")
 
 	// when we get type
 	path := ref.GetPath()
@@ -52,13 +52,13 @@ func TestRef_GetPath(t *testing.T) {
 
 func TestRef_SetTask(t *testing.T) {
 	// when we append task
-	ref := api.Ref("//apps/webapp").SetTask("build")
+	ref := api.StringToRef("//apps/webapp").SetTask("build")
 	if ref != "//apps/webapp:build" {
 		t.Errorf("Task 'build' wasn't appended correctly")
 	}
 
 	// when we change the existing task
-	ref = api.Ref("//apps/webapp:build").SetTask("test")
+	ref = api.StringToRef("//apps/webapp:build").SetTask("test")
 	if ref != "//apps/webapp:test" {
 		t.Errorf("Task wasn't changed to 'test'")
 	}
@@ -66,7 +66,7 @@ func TestRef_SetTask(t *testing.T) {
 
 func TestRef_GetTask(t *testing.T) {
 	// when we have simple ref '//my/app:build'
-	task := api.Ref("//my/app:build").GetTask()
+	task := api.StringToRef("//my/app:build").GetTask()
 
 	// then we should get the 'build'
 	if task != "build" {
@@ -76,7 +76,7 @@ func TestRef_GetTask(t *testing.T) {
 
 func TestRef_GetTask2(t *testing.T) {
 	// when we have just task ':build'
-	task := api.Ref(":build").GetTask()
+	task := api.StringToRef(":build").GetTask()
 
 	// then we should get the 'build'
 	if task != "build" {
@@ -86,7 +86,7 @@ func TestRef_GetTask2(t *testing.T) {
 
 func TestRef_GetTask3(t *testing.T) {
 	// when we have full ref 'type://app:build'
-	task := api.Ref("type://app:build").GetTask()
+	task := api.StringToRef("type://app:build").GetTask()
 
 	// then we should get the 'build'
 	if task != "build" {
@@ -96,7 +96,7 @@ func TestRef_GetTask3(t *testing.T) {
 
 func TestRef_GetTask4(t *testing.T) {
 	// when we have ref without task 'type://app'
-	task := api.Ref("type://app").GetTask()
+	task := api.StringToRef("type://app").GetTask()
 
 	// then task should be empty string
 	if task != "" {
@@ -106,10 +106,23 @@ func TestRef_GetTask4(t *testing.T) {
 
 func TestRef_AbsPath(t *testing.T) {
 	// when we get absolute path for ref. //my/module
-	path := api.Ref("//my/module").AbsPath("../testdata")
+	path := api.StringToRef("//my/module").AbsPath("../testdata")
 
 	// then the path must point to testdata/my/module
 	if !strings.HasSuffix(path, "/testdata/my/module") {
 		t.Errorf("We expect the path has suffix '/testdata/my/module'. Check the path %s", path)
+	}
+}
+
+func TestStringToRef(t *testing.T) {
+	// when we have 2 refs, with whitespace and without it
+	ref1 := api.StringToRef("  //my/module  ")
+	ref2 := api.StringToRef("//my/module")
+
+	// then the hashes must be same
+	hash1 := ref1.GetHash()
+	hash2 := ref2.GetHash()
+	if hash1 != hash2 {
+		t.FailNow()
 	}
 }

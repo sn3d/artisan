@@ -35,7 +35,7 @@ func (t *Task) GetDeps() []Ref {
 	refs := make([]Ref, len(t.Deps))
 	for i, dep := range t.Deps {
 		// this fragment ensure the ':install' is transformed int '//path/to:install'
-		ref := Ref(dep)
+		ref := StringToRef(dep)
 		if ref.IsOnlyTask() {
 			ref = NewRef(t.Ref.GetWorkspace(), "//" + t.Ref.GetPath(), ref.GetTask())
 		}

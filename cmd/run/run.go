@@ -41,7 +41,7 @@ func Run(task string, opts RunOpts) error {
 	}
 
 	// resolve the complete ref to task if we put only ':task'
-	taskRef := api.Ref(task)
+	taskRef := api.StringToRef(task)
 	if taskRef.IsOnlyTask() {
 		currentDir, _ := os.Getwd()
 		moduleRef := ws.FindModule(currentDir)

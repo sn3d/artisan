@@ -12,6 +12,15 @@ import (
 // task is.
 type Ref string
 
+
+// StringToRef is used for converting any string to Ref.
+// Don't use direct casting even Ref is string and prefer this function
+// because some pre-processing and validation
+func StringToRef(str string) Ref {
+	trimmed := strings.Trim(str, " \t")
+	return Ref(trimmed)
+}
+
 // NewRef construct the reference with artisan, path and task.
 // If ref. cannot be constructed because e.g. path is empty string,
 // the output will be empty Ref

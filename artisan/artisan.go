@@ -136,7 +136,7 @@ func (inst *Artisan) AbsPathToRef(abspath string) api.Ref {
 
 	refPath := abspath[len(inst.workspace.RootDir):]
 	refPath = "/" + filepath.ToSlash(refPath)
-	return api.Ref(refPath)
+	return api.StringToRef(refPath)
 }
 
 // Run perform the given task and task's dependencies.
@@ -166,7 +166,7 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 	allEnvs := inst.extractEnvironments(allTasks)
 	allEnvIDs := make(map[string]api.EnvironmentID)
 	for _, env := range allEnvs {
-		imageSrcDir := inst.AbsPath(api.Ref(env.Src))
+		imageSrcDir := inst.AbsPath(api.StringToRef(env.Src))
 		envID, err := engine.Registry.Build(env, imageSrcDir)
 		if err != nil {
 			return err
@@ -180,7 +180,7 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 		// check if task neet to be build
 		if isUpToDate(task, lstore, inst) {
 			fmt.Printf(" - %s: [UP TO DATE]\n", tsk.Ref)
-			break
+			continue
 		}
 
 		envID := allEnvIDs[tsk.EnvName]
