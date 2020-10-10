@@ -178,7 +178,7 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 	fmt.Println("(2/2) Run tasks")
 	for _, tsk := range allTasks {
 		// check if task neet to be build
-		if isUpToDate(task, lstore, inst) {
+		if isUpToDate(tsk, lstore, inst) {
 			fmt.Printf(" - %s: [UP TO DATE]\n", tsk.Ref)
 			continue
 		}
