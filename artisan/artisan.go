@@ -94,17 +94,17 @@ func (inst *Artisan) FindModule(path string) api.Ref {
 func (ws *Artisan) Task(ref api.Ref) (*api.Task, error) {
 	tskName := ref.GetTask()
 	if tskName == "" {
-		return nil, fmt.Errorf("Task is not defined")
+		return nil, fmt.Errorf("Task is not defined in %s", ref)
 	}
 
 	module, err := ws.Module(ref)
 	if err != nil {
-		return nil, fmt.Errorf("Module for task not fount")
+		return nil, fmt.Errorf("Module %s not found", ref.GetPath())
 	}
 
 	task := module.Task(tskName)
 	if task == nil {
-		return nil, fmt.Errorf("Task not present in module")
+		return nil, fmt.Errorf("Task %s not present in %s", tskName, ref)
 	}
 
 	return task, nil
@@ -158,11 +158,14 @@ func (inst *Artisan) Run(taskRef api.Ref) error {
 		return err
 	}
 
-	// phase 1: ensure images
+	allTasks, err := topoSort(task, inst)
+	if err != nil {
+		return err
+	}
 
+	// phase 1: ensure images
 	fmt.Println("(1/2) Resolve images")
 
-	allTasks := topoSort(task, inst)
 	allEnvs := inst.extractEnvironments(allTasks)
 	allEnvIDs := make(map[string]api.EnvironmentID)
 	for _, env := range allEnvs {

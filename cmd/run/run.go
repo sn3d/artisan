@@ -1,6 +1,7 @@
 package run
 
 import (
+	"fmt"
 	"github.com/unravela/artisan/api"
 	"github.com/unravela/artisan/artisan"
 	"github.com/urfave/cli/v2"
@@ -50,6 +51,7 @@ func Run(task string, opts RunOpts) error {
 
 	err = ws.Run(taskRef)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err);
 		return err
 	}
 
