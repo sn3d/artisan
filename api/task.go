@@ -16,7 +16,7 @@ type Task struct {
 	// Script is command that is invoked as task. It's executed as shell-form
 	// of CMD
 	Script string `hcl:"script"`
-	// Deps is list of other tasks this task depends on
+	// Deps is list of version tasks this task depends on
 	Deps []string `hcl:"deps,optional"`
 
 	Include []string `hcl:"include,optional"`

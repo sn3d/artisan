@@ -8,34 +8,38 @@ import (
 	"os"
 )
 
-type RunOpts struct {
+type Opts struct {
 	CurrentDir string
 }
 
-var opts RunOpts
-
-var RunCmd = &cli.Command{
+var Cmd = &cli.Command{
 	Name:      "run",
 	Usage:     "run the task",
 	ArgsUsage: "[//path/to/module:task or :task]",
-	Action:    runAction,
+	Action:    main,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:        "artisan-dir",
 			Aliases:     []string{"d"},
 			Value:       "",
 			Usage:       "Path to artisan directory, by default it's current directory.",
-			Destination: &opts.CurrentDir,
 		},
 	},
 }
 
-func runAction(ctx *cli.Context) error {
-	return Run(ctx.Args().First(), opts)
+func main(ctx *cli.Context) error {
+	task := ctx.Args().First()
+	if task == "" {
+		return fmt.Errorf("no task specified")
+	}
+
+	return Run(task, Opts{
+		CurrentDir: ctx.String("artisan-dir"),
+	})
 }
 
 // Run the given task
-func Run(task string, opts RunOpts) error {
+func Run(task string, opts Opts) error {
 	ws, err := artisan.OpenWorkspace(opts.CurrentDir)
 	if err != nil {
 		return err

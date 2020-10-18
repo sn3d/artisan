@@ -7,7 +7,7 @@
 #      $ curl -sfL https://artisan.unravela.io/install.sh | sh
 #
 
-# Ensure the temp and isntall directory
+# Ensure the temp and installation directory
 echo "Initialize..."
 TMPDIR=$(mktemp -d)
 INSTALLDIR=/usr/local/bin
