@@ -12,7 +12,7 @@ import (
 )
 
 // Artisan is main facade and provide most of the functionality over
-// opened artisan
+// opened workspace
 type Artisan struct {
 	// hold the opened workspace
 	workspace api.Workspace
