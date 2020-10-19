@@ -14,14 +14,15 @@ and Gradle. For Artisan, the Java backend and Vue frontend are separated modules
 Both modules have a 'build' task. Example of `frontend/MODULE.hcl`: 
 
 ```hcl
+# file: frontend/MODULE.hcl
 task "node:lts-alpine" "build" {
   script = "npm install && npm run build"
+  ...
+}
 
-  # we need ignore output folders to keep build fast
-  exclude = [
-    "dist",
-    "node_modules"
-  ]
+# file: backend/MODULE.hcl
+task "go" "build" {
+  script = "go build"  
 }
 ``` 
 
