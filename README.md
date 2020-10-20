@@ -6,7 +6,8 @@
 
 Artisan helps you build complex heterogeneous repositories without the need to 
 install any complicated tools of specific versions as pre-requirements. The main 
-idea is: Run the same build everywhere.
+idea is: Run the same build everywhere. Doesn't matter if it's running on your local
+machine, on GitLab or GitHub.
  
 ## How it works
 Let's have a repository with a backend application written as Java/Gradle 
@@ -40,6 +41,28 @@ artisan run //backend:build
 Check the [simple demo repository](http://github.com/unravela/artisan-simple-demo)
 for demonstration of small monorepo with one frontend and backend application.
 
+## CI/CD services
+
+Run the same build everywhere means running the build on your local machine and 
+popular CI/CD services like GitLab, GitHub, and CircleCI the same way. 
+For GitLab, all you need is add the following `.gitlab-ci.yml` into the 
+repository:
+
+```yaml
+image: docker:19.03.0
+
+services:
+    - docker:19.03.0-dind
+
+build:
+    script:
+        - apk --no-cache add curl
+        - curl -sfL https://artisan.unravela.io/install.sh | sh
+        - artisan run //backend:build
+```
+
+You can see the running example of demo repository on [GitLab](https://gitlab.com/unravela/artisan-simple-demo/-/jobs/)  
+
 ## Installation
 If you're **Linux** user, you can use the following command:
 
@@ -60,3 +83,8 @@ If you're **Windows** user, you can download [ZIP archive](https://github.com/un
 scoop bucket add unravela https://github.com/unravela/scoop-bucket
 scoop install artisan
 ```
+
+## Credits 
+
+Thanks to [Zladovan](https://github.com/zladovan) for idea-sharing, igniting 
+the sparkle, and inspiration in [zladovan/monorepo](https://github.com/zladovan/monorepo)
