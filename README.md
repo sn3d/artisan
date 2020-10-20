@@ -4,14 +4,15 @@
 [![Build](https://img.shields.io/github/workflow/status/unravela/artisan/build?style=flat-square)](https://github.com/unravela/artisan/actions?query=workflow%3Abuild)
 
 
-Artisan is a build orchestrator for mono repositories powered by Docker. Artisan 
-helps you build complex codebases without the need to install all build tools.
+Artisan helps you build complex heterogeneous repositories without the need to 
+install any complicated tools of specific versions as pre-requirements. The main 
+idea is: Run the same build everywhere.
  
 ## How it works
-Let's have a repository with an application written in Java and build by Gradle 
-and Vue frontend. Usually, we need to install the correct version of NPM, Java, 
-and Gradle. For Artisan, the Java backend and Vue frontend are separated modules. 
-Both modules have a 'build' task. Example of `frontend/MODULE.hcl`: 
+Let's have a repository with a backend application written as Java/Gradle 
+and Vue.JS frontend. Usually, we need to install the correct versions of NPM, Java, 
+and Gradle into our system. For Artisan, the backend and frontend are modules. Each 
+module has `build` task executed in its own docker container. 
 
 ```hcl
 # file: frontend/MODULE.hcl
@@ -21,14 +22,16 @@ task "node:lts-alpine" "build" {
 }
 
 # file: backend/MODULE.hcl
-task "go" "build" {
-  script = "go build"  
+task "gradle:6.7.0-jdk11" "build" {
+  script = "gradle build"
+  deps = [ "//frontend:build" ]  
 }
 ``` 
 
 When we run the `backend` build, the Artisan executes tasks for each module 
-within an own docker container. Because there is dependency set, the frontend 
-is build first and backend last.
+within an own docker container. There is no need to have NPM or Java installed. 
+Because there is dependency between backend and frontend, the frontend is build 
+first and backend last.
 
 ```
 artisan run //backend:build
