@@ -1,7 +1,7 @@
 # Artisan
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/unravela/artisan/master/doc/assets/banner.png" alt="Artisan" width="1024" height="341">
+    <img src="https://raw.githubusercontent.com/unravela/artisan/main/doc/assets/banner.png" alt="Artisan" width="1024" height="341">
 </p>
 
 [![Release](https://img.shields.io/github/release/unravela/artisan.svg?style=flat-square)](https://github.com/unravela/artisan/releases/latest)
