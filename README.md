@@ -1,11 +1,8 @@
-# Artisan
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/unravela/artisan/main/doc/assets/banner.png" alt="Artisan" width="1024" height="341">
-</p>
+![Artisan](https://raw.githubusercontent.com/unravela/artisan/main/doc/assets/banner.png)
 
-[![Release](https://img.shields.io/github/release/unravela/artisan.svg?style=flat-square)](https://github.com/unravela/artisan/releases/latest)
-[![Build](https://img.shields.io/github/workflow/status/unravela/artisan/build?style=flat-square)](https://github.com/unravela/artisan/actions?query=workflow%3Abuild)
+[![Release](https://img.shields.io/github/release/unravela/artisan.svg?style=flat-square)](https://github.com/unravela/artisan/releases/latest) [![Build](https://img.shields.io/github/workflow/status/unravela/artisan/build?style=flat-square)](https://github.com/unravela/artisan/actions?query=workflow%3Abuild)
+
 
 The mission is: Run the same build easily everywhere, anytime. It doesn't matter 
 if you want to build on your local machine, on GitLab, or GitHub. Artisan is 
